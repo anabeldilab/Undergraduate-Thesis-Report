@@ -105,208 +105,36 @@
 \renewcommand\listfigurename{Índice de Figuras}    
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% First Page
+% Cover page
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\pagestyle{empty}
-\thispagestyle{empty}
-
-
-\newcommand{\HRule}{\rule{\linewidth}{1mm}}
-\setlength{\parindent}{0mm}
-\setlength{\parskip}{0mm}
-
-\vspace*{\stretch{0.5}}
-
-\begin{center}
-\includegraphics[scale=0.8]{images/escuela-ingenieria-tecnologia-original}\\[10mm]
-{\Huge Trabajo de Fin de Grado}
-\end{center}
-
-\HRule
-\begin{flushright}
-        {\Huge Titulo del trabajo} \\[2.5mm]
-        {\Large \textit{Título del trabajo en inglés}} \\[5mm]
-        {\Large Nombre y apellidos} \\[5mm]
-
-
-\end{flushright}
-\HRule
-\vspace*{\stretch{2}}
-\begin{center}
-  \Large La Laguna, \today
-\end{center}
-
-\setlength{\parindent}{5mm}
+\input{frontmatter/cover.tex}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Signature page (add the official stamp)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\newpage
-\thispagestyle{empty}
-
-D. {\bf Nombre Apellido1 Apellido2}, con N.I.F. 12.345.678-X profesor Titular de Universidad adscrito al Departamento de Nombre del Departamento de la Universidad de La Laguna, como tutor
-
-\bigskip
-D. {\bf Nombre Apellido1 Apellido2}, con N.I.F. 12.345.678-X profesor Titular de Universidad adscrito al Departamento de Nombre del Departamento de la Universidad de La Laguna, como cotutor\pagestyle{empty}
-
-\bigskip
-\bigskip
-{\bf C E R T I F I C A (N)}
-
-\bigskip
-\bigskip
-Que la presente memoria titulada:
-
-\bigskip
-''{\it Título del Trabajo}''
-
-\bigskip
-\bigskip
-\bigskip
-
-\noindent ha sido realizada bajo su dirección por D. {\bf Nombre Apellido1 Apellido2},
-con N.I.F. 12.345.678-X.
-
-\bigskip
-\bigskip
-
-Y para que así conste, en cumplimiento de la legislación vigente y a los efectos
-oportunos firman la presente en La Laguna a \today
+\input{frontmatter/signature.tex}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\newpage
-\thispagestyle{empty}
-
-{ \flushright
-
-\begin{LARGE}
-Agradecimientos
-\end{LARGE}
-
-\hspace{3mm}
-
-\begin{large}
-XXXXX
-\end{large}
-
-}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\newpage
-\thispagestyle{empty}
-
-\bigskip
-\begin{LARGE}
-Licencia
-\end{LARGE}
-
-\bigskip
-* Si NO quiere permitir que se compartan las adaptaciones de tu obra y NO quieres permitir usos comerciales de tu obra indica:
-
-\begin{center}
-\includegraphics[scale=1.8]{images/by-nc-nd_88x31}\\[5mm]
-\end{center}
-
-\begin{large}
-© Esta obra está bajo una licencia de Creative Commons Reconocimiento-NoComercial-SinObraDerivada 4.0 Internacional.
-\end{large}
-
-\bigskip
-\bigskip
-\bigskip
-* Si quiere permitir que se compartan las adaptaciones de tu obra mientras se comparta de la misma manera y NO quieres permitir usos comerciales de tu obra indica:
-
-\begin{center}
-\includegraphics[scale=1.8]{images/by-nc-sa_88x31}\\[5mm]
-\end{center}
-
-\begin{large}
-© Esta obra está bajo una licencia de Creative Commons Reconocimiento-NoComercial-CompartirIgual 4.0 Internacional.
-\end{large}
-
-\bigskip
-\bigskip
-\bigskip
-* Si quiere permitir que se compartan las adaptaciones de tu obra y NO quieres permitir usos comerciales de tu obra indica:
-
-\begin{center}
-\includegraphics[scale=1.8]{images/by-nc_88x31}\\[5mm]
-\end{center}
-
-\begin{large}
-© Esta obra está bajo una licencia de Creative Commons Reconocimiento-NoComercial 4.0 Internacional.
-\end{large}
+% Acknowledgments
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\input{frontmatter/acknowledgments.tex}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\newpage
-\thispagestyle{empty}
-
-\bigskip
-*Si NO quiere permitir que se compartan las adaptaciones de tu obra y quieres permitir usos comerciales de tu obra indica:
-
-\begin{center}
-\includegraphics[scale=1.8]{images/by-nd_88x31}\\[5mm]
-\end{center}
-
-\begin{large}
-© Esta obra está bajo una licencia de Creative Commons Reconocimiento-SinObraDerivada 4.0 Internacional.
-\end{large}
-
-\bigskip
-\bigskip
-\bigskip
-* Si quiere permitir que se compartan las adaptaciones de tu obra mientras se comparta de la misma manera y quieres permitir usos comerciales de tu obra (licencia de Cultura Libre) indica:
-
-\begin{center}
-\includegraphics[scale=1.8]{images/by-sa_88x31}\\[5mm]
-\end{center}
-
-\begin{large}
-© Esta obra está bajo una licencia de Creative Commons Reconocimiento-CompartirIgual 4.0 Internacional.
-\end{large}
-
-\bigskip
-\bigskip
-\bigskip
-* Si quiere permitir que se compartan las adaptaciones de tu obra y quieres permitir usos comerciales de tu obra (licencia de Cultura Libre) indica:
-
-\begin{center}
-\includegraphics[scale=1.8]{images/by_88x31}\\[5mm]
-\end{center}
-
-\begin{large}
-© Esta obra está bajo una licencia de Creative Commons Reconocimiento 4.0 Internacional.
-\end{large}
+% License
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\input{frontmatter/licence.tex}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\newpage 
-\thispagestyle{empty}
+% Abstract ES
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\input{frontmatter/abstract_es.tex}
 
-\begin{abstract}
-{\em
-xxxxx
-}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Abstract EN
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\input{frontmatter/abstract_en.tex}
 
-\begin{palabrasClave}
-xxxxx, xxxx, xxxx
-\end{palabrasClave}
 
-\end{abstract}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\newpage 
-\vspace*{200px}
-\thispagestyle{empty}
-
-\begin{summary}
-{
-xxxxx
-}
-
-\em
-\begin {keywords}
-xxxx, xxxx, xxxx
-\end {keywords}
-
-\end{summary}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \newpage{\pagestyle{empty}}
 \thispagestyle{empty}
@@ -348,24 +176,23 @@ xxxx, xxxx, xxxx
 \newpage
 \thispagestyle{empty}
 
-%Numeracion a partir del capitulo I
 \renewcommand{\thepage}{\arabic{page}}
 \setcounter{page}{1}
 \pagestyle{plain}
 
 \chapter{\LARGE Introducción}
-\label{chapter:intro}
+\label{chapter:introduction}
 
-\input{cap1.tex}
+\input{chapters/cap1.tex}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \newpage{\pagestyle{empty}}
 \thispagestyle{empty}
 
 \chapter{\LARGE Título del Capítulo 2}
-\label{chapter:dos}
+\label{chapter:stateOfTheArt}
 
-\input{cap2.tex}
+\input{chapters/cap2.tex}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \newpage{\pagestyle{empty}}
@@ -374,7 +201,7 @@ xxxx, xxxx, xxxx
 \chapter{\LARGE Título del Capítulo 3}
 \label{chapter:tres}
 
-\input{cap3.tex}
+\input{chapters/cap3.tex}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \newpage{\pagestyle{empty}}
@@ -383,7 +210,7 @@ xxxx, xxxx, xxxx
 \chapter{\LARGE Título del Capítulo 4}
 \label{chapter:cuatro}
 
-\input{cap4.tex}
+\input{chapters/cap4.tex}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \newpage{\pagestyle{empty}}
@@ -392,7 +219,7 @@ xxxx, xxxx, xxxx
 \chapter{\LARGE Conclusiones y líneas futuras}
 \label{chapter:Resultados}
 
-\input{cap5.tex}
+\input{chapters/cap5.tex}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \newpage{\pagestyle{empty}}
@@ -401,7 +228,7 @@ xxxx, xxxx, xxxx
 \chapter{\LARGE Summary and Conclusions}
 \label{chapter:Conclusiones}
 
-\input{cap6.tex}
+\input{chapters/cap6.tex}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \newpage{\pagestyle{empty}}
@@ -410,7 +237,7 @@ xxxx, xxxx, xxxx
 \chapter{\LARGE Presupuesto}
 \label{chapter:presupuesto}
 
-\input{cap7.tex}
+\input{chapters/cap7.tex}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \newpage{\pagestyle{empty}\cleardoublepage}
@@ -420,11 +247,11 @@ xxxx, xxxx, xxxx
 
 \chapter{\LARGE Título del Apéndice 1}
 \label{appendix:1}
-\input{apendice1.tex}
+\input{appendix/apendice1.tex}
 
 \chapter{\LARGE Título del Apéndice 2}
 \label{appendix:2}
-\input{apendice2.tex}
+\input{appendix/apendice2.tex}
 
 \end{appendix}
 
