@@ -53,13 +53,14 @@
 {\par\noindent\begin{center}\textbf{Abstract}\end{center}\begin{itshape}\par\noindent}
 {\end{itshape}}
 
-\newenvironment{keywords}
+\newenvironment{keyWordsEN, keyWordsES}
 {\begin{list}{}{\setlength{\leftmargin}{1em}}\item[\hskip\labelsep \bfseries Keywords:]}
 {\end{list}}
 
-\newenvironment{palabrasClave}
-{\begin{list}{}{\setlength{\leftmargin}{1em}}\item[\hskip\labelsep \bfseries Palabras clave:]}
+\newenvironment{abstractEN, abstractES}
+{\begin{list}{}{\setlength{\leftmargin}{1em}}\item[\hskip\labelsep \bfseries Keywords:]}
 {\end{list}}
+
 
 \usepackage{bera}% optional: just to have a nice mono-spaced font
 \usepackage{listings}
@@ -183,7 +184,7 @@
 \chapter{\LARGE Introducción}
 \label{chapter:introduction}
 
-\input{chapters/cap1.tex}
+\input{chapters/chapter1_introduction.tex}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \newpage{\pagestyle{empty}}
@@ -192,7 +193,7 @@
 \chapter{\LARGE Título del Capítulo 2}
 \label{chapter:stateOfTheArt}
 
-\input{chapters/cap2.tex}
+\input{chapters/chapter2_stateOfTheArt.tex}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \newpage{\pagestyle{empty}}
@@ -201,7 +202,7 @@
 \chapter{\LARGE Título del Capítulo 3}
 \label{chapter:tres}
 
-\input{chapters/cap3.tex}
+\input{chapters/chapter3_.tex}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \newpage{\pagestyle{empty}}
@@ -210,7 +211,7 @@
 \chapter{\LARGE Título del Capítulo 4}
 \label{chapter:cuatro}
 
-\input{chapters/cap4.tex}
+\input{chapters/chapter4_.tex}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \newpage{\pagestyle{empty}}
@@ -219,7 +220,7 @@
 \chapter{\LARGE Conclusiones y líneas futuras}
 \label{chapter:Resultados}
 
-\input{chapters/cap5.tex}
+\input{chapters/chapter5_results.tex}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \newpage{\pagestyle{empty}}
@@ -228,7 +229,7 @@
 \chapter{\LARGE Summary and Conclusions}
 \label{chapter:Conclusiones}
 
-\input{chapters/cap6.tex}
+\input{chapters/chapter6_summaryConclusions.tex}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \newpage{\pagestyle{empty}}
@@ -237,7 +238,7 @@
 \chapter{\LARGE Presupuesto}
 \label{chapter:presupuesto}
 
-\input{chapters/cap7.tex}
+\input{chapters/chapter7_presupuesto.tex}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \newpage{\pagestyle{empty}\cleardoublepage}
@@ -257,7 +258,9 @@
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{thebibliography}{X}
-% Aquí figurará la bibliografía
+    %Here goes the bibliography with .bib files
+    %\bibitem{bib:1}
+
 \end{thebibliography}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
