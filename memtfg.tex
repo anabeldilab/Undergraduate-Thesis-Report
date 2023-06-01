@@ -18,7 +18,7 @@
 \usepackage{caption}
 \usepackage{chngpage}
 \usepackage{float}
-\usepackage{enumitem,lipsum}
+\usepackage{lipsum}
 \usepackage{graphicx}
 \usepackage{lscape}
 \usepackage{microtype}
@@ -33,8 +33,8 @@
 \usepackage{eurosym}
 \usepackage{xcolor}
 \usepackage{tabu}
-
 \usepackage{lineno}
+
 %\\linenumbers
 %\setlength\linenumbersep{5pt}
 %\renewcommand\linenumberfont{\normalfont\tiny\sffamily\color{gray}}
@@ -49,18 +49,17 @@
 {\begin{list}{}{\setlength{\leftmargin}{1em}}\item\tiny\bfseries}
 {\end{list}}
 
-\newenvironment{summary}
+\newenvironment{abstract_en}
 {\par\noindent\begin{center}\textbf{Abstract}\end{center}\begin{itshape}\par\noindent}
 {\end{itshape}}
 
-\newenvironment{keyWordsEN, keyWordsES}
+\newenvironment{keywords}
 {\begin{list}{}{\setlength{\leftmargin}{1em}}\item[\hskip\labelsep \bfseries Keywords:]}
 {\end{list}}
 
-\newenvironment{abstractEN, abstractES}
-{\begin{list}{}{\setlength{\leftmargin}{1em}}\item[\hskip\labelsep \bfseries Keywords:]}
+\newenvironment{palabrasClave}
+{\begin{list}{}{\setlength{\leftmargin}{1em}}\item[\hskip\labelsep \bfseries Palabras clave:]}
 {\end{list}}
-
 
 \usepackage{bera}% optional: just to have a nice mono-spaced font
 \usepackage{listings}
@@ -105,9 +104,9 @@
 \renewcommand\listtablename{Índice de Tablas}    
 \renewcommand\listfigurename{Índice de Figuras}    
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Cover page
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \input{frontmatter/cover.tex}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -120,21 +119,20 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \input{frontmatter/acknowledgments.tex}
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % License
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \input{frontmatter/licence.tex}
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Abstract ES
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\input{frontmatter/abstract_es.tex}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\input{frontmatter/abstractES.tex}
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Abstract EN
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\input{frontmatter/abstract_en.tex}
-
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\input{frontmatter/abstractEN.tex}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \newpage{\pagestyle{empty}}
@@ -177,41 +175,39 @@
 \newpage
 \thispagestyle{empty}
 
+%Numeracion a partir del capitulo I
 \renewcommand{\thepage}{\arabic{page}}
 \setcounter{page}{1}
 \pagestyle{plain}
 
 \chapter{\LARGE Introducción}
-\label{chapter:introduction}
+\label{chapter:one}
 
-\input{chapters/chapter1_introduction.tex}
+\input{chapters/chapter1_introduction/1_contextAndJustification}
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\newpage{\pagestyle{empty}}
-\thispagestyle{empty}
+\input{chapters/chapter1_introduction/2_objectives}
 
-\chapter{\LARGE Título del Capítulo 2}
-\label{chapter:stateOfTheArt}
+\input{chapters/chapter1_introduction/3_stateOfTheArt}
 
-\input{chapters/chapter2_stateOfTheArt.tex}
+\input{chapters/chapter1_introduction/4_problemsToSolve}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \newpage{\pagestyle{empty}}
 \thispagestyle{empty}
 
-\chapter{\LARGE Título del Capítulo 3}
+\chapter{\LARGE Técnicas y herramientas utilizadas}
+\label{chapter:dos}
+
+\input{chapters/TecnicasyHerramientas.tex}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newpage{\pagestyle{empty}}
+\thispagestyle{empty}
+
+\chapter{\LARGE Desarrollo de nuevas funcionalidades}
 \label{chapter:tres}
 
-\input{chapters/chapter3_.tex}
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\newpage{\pagestyle{empty}}
-\thispagestyle{empty}
-
-\chapter{\LARGE Título del Capítulo 4}
-\label{chapter:cuatro}
-
-\input{chapters/chapter4_.tex}
+\input{chapters/Desarrollo.tex}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \newpage{\pagestyle{empty}}
@@ -220,7 +216,7 @@
 \chapter{\LARGE Conclusiones y líneas futuras}
 \label{chapter:Resultados}
 
-\input{chapters/chapter5_results.tex}
+\input{chapters/ConclusionesES}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \newpage{\pagestyle{empty}}
@@ -229,7 +225,7 @@
 \chapter{\LARGE Summary and Conclusions}
 \label{chapter:Conclusiones}
 
-\input{chapters/chapter6_summaryConclusions.tex}
+\input{chapters/ConclusionesEN}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \newpage{\pagestyle{empty}}
@@ -238,30 +234,23 @@
 \chapter{\LARGE Presupuesto}
 \label{chapter:presupuesto}
 
-\input{chapters/chapter7_presupuesto.tex}
+\input{chapters/Preupuesto.tex}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\newpage{\pagestyle{empty}\cleardoublepage}
+\newpage{\pagestyle{empty}}
 \thispagestyle{empty}
 
-\begin{appendix}
+\chapter{\LARGE Bibliografía}
+\label{chapter:Bibliografía}
 
-\chapter{\LARGE Título del Apéndice 1}
-\label{appendix:1}
-\input{appendix/apendice1.tex}
+\input{chapters/biblio.tex}
 
-\chapter{\LARGE Título del Apéndice 2}
-\label{appendix:2}
-\input{appendix/apendice2.tex}
-
-\end{appendix}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{thebibliography}{X}
-    %Here goes the bibliography with .bib files
-    %\bibitem{bib:1}
-
-\end{thebibliography}
+%\begin{thebibliography}{X}
+% Aquí figurará la bibliografía
+%\end{thebibliography}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \end{document}
