@@ -27,5 +27,5 @@ The work accomplished is divided in two parts:
 
 ## Work Accomplished
 Here are the links to the other repositories related to my Bachelor's Degree thesis:
-- [BDT-BCI](https://github.com/anabeldilab/BDT-BCI/): Unity project
-- [BDT-ROS](https://github.com/anabeldilab/BDT-ROS2/): ROS nodes
+- [Thesis-Unity](https://github.com/anabeldilab/Thesis-Unity/): Unity project
+- [Thesis-ROS](https://github.com/anabeldilab/Thesis-ROS2/): ROS nodes
