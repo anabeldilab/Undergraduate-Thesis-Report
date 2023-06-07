@@ -22,23 +22,18 @@
 \usepackage{graphicx}
 \usepackage{lscape}
 \usepackage{microtype}
-\usepackage{natbib}
+\usepackage[numbers]{natbib}
 \usepackage{pdflscape}
 \usepackage{rotating}
 \usepackage{subcaption}
 \usepackage{ctable}
-\usepackage{hyperref}
 \usepackage{enumerate}
 \usepackage{gensymb}
 \usepackage{eurosym}
 \usepackage{xcolor}
 \usepackage{tabu}
 \usepackage{lineno}
-
-%\\linenumbers
-%\setlength\linenumbersep{5pt}
-%\renewcommand\linenumberfont{\normalfont\tiny\sffamily\color{gray}}
-
+\usepackage{hyperref}
 \usepackage[top=2cm, bottom=2cm, left=2cm, right=2cm]{geometry}
 
 \newenvironment{sourcecode}
@@ -159,7 +154,8 @@
 \tableofcontents
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\newpage{\pagestyle{empty}}
+\newpage
+\thispagestyle{empty}
 
 \listoffigures
 
@@ -188,8 +184,6 @@
 \input{chapters/chapter1_introduction/2_objectives}
 
 \input{chapters/chapter1_introduction/3_stateOfTheArt}
-
-\input{chapters/chapter1_introduction/4_problemsToSolve}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \newpage{\pagestyle{empty}}
