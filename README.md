@@ -3,7 +3,7 @@
 Written by Anabel Díaz Labrador
 
 ## Description
-This repository contains the memory of my Bachelor's Degree thesis in Computer Engineering, which focuses on the development of a Brain-Computer Interface (BCI), specifically  Steady-State Visual Evoked Potential (SSVEP) BCI. The main objective of the thesis is to propose and analyze the feasibility of utilizing a BCI system for controlling electromechanical devices such as servomotors or levers, by leveraging the brain signals detected by the BCI device.
+This repository contains the report for my Bachelor's Degree thesis in Computer Engineering, which is focused on the development of a Brain-Computer Interface (BCI), specifically the Steady-State Visual Evoked Potential (SSVEP) BCI. The main objective of the thesis is to propose and analyze the feasibility of using a BCI system to control electromechanical devices, such as servomotors or levers, by detecting and interpreting brain signals.
 
 Please note that this repository specifically contains the LaTeX source code for the thesis document. It is based on the 2021 version of the Overleaf compiler. It does not include the other project files or additional materials related to the thesis.
 
