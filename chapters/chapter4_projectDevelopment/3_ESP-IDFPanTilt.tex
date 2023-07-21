@@ -1,0 +1,163 @@
+\section{Proyecto ESP-IDF: Pan-Tilt}
+
+Además del repositorio de Unity, se maneja un repositorio aparte, ESP-IDF, que se emplea para la gestión del microcontrolador ESP32. Este repositorio se utiliza específicamente para controlar el mecanismo Pan-Tilt y la cámara, permitiendo un control eficiente y adaptativo de estos componentes.
+
+\subsection{Configuración de Comunicación: Personalización del Transporte}
+
+En este proyecto, la personalización del canal de comunicación se lleva a cabo mediante micro-ROS Transports, centrado especialmente en la UART (Universal Asynchronous Receiver-Transmitter) del ESP32. Este enfoque permite ajustar la comunicación a las necesidades específicas y características del hardware. Dado su papel crucial en la transmisión y recepción de datos, la UART es vital para la comunicación y control de otros dispositivos y sensores en el contexto del ESP32.
+
+
+
+Para lograr esta personalización, se desarrolla un componente de transporte especializado. Este componente, basado en las funciones proporcionadas por micro-ROS Transports, gestiona la apertura, cierre, lectura y escritura de datos a través del puerto UART del ESP32.
+
+
+
+El código para este componente se ha derivado de los ejemplos proporcionados en int32\_publisher\_custom\_transport\footnote{int32\_publisher\_custom\_transport: \url{https://github.com/micro-ROS/micro\_ros\_espidf\_component/tree/iron/examples/int32\_publisher\_custom\_transport}}. Sin embargo, se ha decidido convertirlo en un componente dedicado por su funcionalidad completa.
+
+
+
+Gracias a la implementación de estas funciones, se logra establecer una comunicación personalizada utilizando la UART del ESP32 como medio de transporte. Este enfoque facilita la integración de este microcontrolador en sistemas que utilizan micro-ROS como middleware de comunicación.
+
+
+
+El correcto despliegue de este componente requiere seguir las pautas establecidas en la sección \ref{subsection:componentcreation}.
+
+
+
+Este componente se encarga de la inicialización del ESP32 y configura su modo de transporte.
+
+
+\subsection{Gestión del Pan-Tilt: Creación de un Componente Dedicado}
+
+Con el objetivo de controlar de manera eficaz y organizada los movimientos del sistema Pan-Tilt en el dispositivo, se desarrolló un componente específico. La estructura de este componente y la justificación de su creación se detallan en la sección \ref{subsection:componentcreation}, mientras que el código está disponible en los apéndices \ref{appendix:pantiltcontrollerheader} y \ref{appendix:pantiltcontroller}.
+
+
+
+El componente dedicado a la gestión del Pan-Tilt se diseñó para asegurar un control preciso de la modulación de ancho de pulso (PWM), esencial para manejar correctamente los movimientos del sistema. Este aspecto del diseño del componente se explica en profundidad en la sección \ref{subsection:pwm}.
+
+
+
+El componente se compone de varias partes, que se listan a continuación:
+
+\begin{itemize}
+    \item Constantes SERVO\_MIN\_DUTY, SERVO\_MAX\_DUTY, SERVO\_MIDDLE\_DUTY, SERVO\_MAX\_ANGLE y SERVO\_MIN\_ANGLE que definen los límites de los servomotores en términos de su ciclo de trabajo y los ángulos permitidos.
+    \item Estructuras TimerState, ServoState y PanTiltState que almacenan el estado actual de los temporizadores y los servomotores.
+    \item Funciones init\_horizontal\_servo, init\_vertical\_servo y init\_pwm\_timer, que inicializan los servomotores y el temporizador PWM. Incluyen además las funciones configure\_timer y configure\_servo, que configuran estos componentes utilizando la interfaz de control LEDC del ESP32.
+    \item Funciones default\_pan\_tilt\_init, pan\_tilt\_init y pan\_tilt\_deinit para manejar el estado de la plataforma de pan-tilt.
+    \item Funciones set\_horizontal\_angle y set\_vertical\_angle, que permiten establecer los ángulos de los servomotores horizontales y verticales, respectivamente.
+    \item Funciones update\_timer\_state, 
+    
+    update\_horizontal\_servo\_state y update\_vertical\_servo\_state, que actualizan las estructuras de estado correspondientes.
+    \item Finalmente, las funciones servo\_deinit y timer\_deinit, utilizadas para desactivar los servomotores y los temporizadores.
+\end{itemize}
+
+\subsubsection{Tests del Componente Pan-Tilt}
+
+Para garantizar el correcto funcionamiento del componente Pan-Tilt, se han llevado a cabo una serie de pruebas. Estas pruebas ayudan a asegurar que los movimientos del sistema Pan-Tilt están bien controlados y que las funciones y estructuras que conforman el componente están trabajando según lo esperado.
+
+
+
+El código de las pruebas se puede ver en el apéndice \ref{appendix:pantilttests}.
+
+
+
+Las pruebas realizadas son las siguientes:
+
+\begin{itemize}
+
+\item{Prueba de límites máximos y mínimos de duty cycle: 
+\
+(TEST\_CASE("Test max duty and min duty", "[pan\_tilt\_controller]")) 
+Esta prueba verifica que los límites de duty cycle de los servomotores se establecen correctamente.
+}
+\item{ Prueba de inicialización del Pan-Tilt \
+
+(TEST\_CASE("Test pan-tilt initializated", "[pan\_tilt\_controller]")): \
+
+esta prueba confirma que el sistema Pan-Tilt se inicializa correctamente.
+}
+\item{ Pruebas de ángulo horizontal y vertical \
+
+(TEST\_CASE("Test initial horizontal angle", "[pan\_tilt\_controller]") \
+
+y TEST\_CASE("Test initial vertical angle", "[pan\_tilt\_controller]")): \
+estas pruebas verifican que los ángulos horizontales y verticales de los servomotores se establecen y se actualizan correctamente.
+}
+\item{ Prueba de incremento de movimiento \
+(TEST\_CASE("Test increment movement", "[pan\_tilt\_controller]")): \
+esta prueba verifica que el sistema Pan-Tilt puede cambiar su ángulo vertical con precisión, lo cual es importante para garantizar un movimiento suave y controlado.
+}
+\end{itemize}
+
+
+Las pruebas se realizan utilizando la biblioteca Unity, que proporciona un marco para la creación de pruebas unitarias en C. Todas las pruebas pasaron con éxito, lo que indica que el componente Pan-Tilt está funcionando correctamente y puede controlar los movimientos del sistema con precisión.
+
+\subsection{Gestión micro-ROS}
+Para la gestión de micro-ROS dentro del ESP32 se ha creado una tarea específica (micro\_ros\_task).
+
+
+
+La razón para dedicar una tarea a la gestión de micro-ROS es que este middleware necesita tiempo de procesador para gestionar las comunicaciones entre los diferentes nodos. Al dedicar una tarea a esta función, se garantiza que micro-ROS tiene el tiempo necesario para gestionar estas comunicaciones sin interferir con otras tareas que el microcontrolador pueda estar realizando.
+
+\subsubsection{Suscriptor}
+La función de callback del suscriptor es subscription\_callback. Esta función es bastante grande porque tiene que manejar una variedad de mensajes diferentes que podrían ser enviados al nodo del suscriptor.
+
+
+
+La función de callback comienza por extraer los datos del mensaje recibido. Si el mensaje es demasiado largo, se imprime un error y la función se detiene.
+
+
+
+A continuación, la función de callback extrae el comando y los datos del mensaje y los publica en otro tema.
+
+
+
+Finalmente, la función de callback ejecuta diferentes acciones dependiendo del comando y los datos recibidos. Estas acciones pueden incluir inicializar la conexión WiFi como punto de acceso, desconectar la conexión WiFi, establecer los ángulos de los servos y más.
+
+\subsubsection{Publicador}
+En este proyecto, el publicador se inicializa en la función micro\_ros\_task, mediante el uso de la función rclc\_publisher\_init\_default. El publicador se configura para enviar mensajes del tipo std\_msgs\_\_msg\_\_Header al tema "/freertos\_header\_log".
+
+
+
+Posteriormente, el publicador se emplea en distintas secciones del código para la transmisión de diversos mensajes. Específicamente, se utiliza en la función de devolución de llamada del suscriptor para enviar comandos y datos recibidos como registros.
+
+
+
+Además, el publicador juega un papel importante en la gestión de conexiones WiFi. Por ejemplo, la función wifi\_event\_handler\_sap maneja diferentes eventos que pueden suceder en la red Soft Access Point (SAP). En el evento de que una estación se conecte y su MAC coincida con la MAC objetivo (la MAC de la cámara) el publicador envía un mensaje con la dirección IP de la estación recién conectada.
+
+
+
+En caso de desconexión de una estación, el publicador informa si la estación desconectada es la estación objetivo. Si se asigna una IP a una estación, el publicador notifica la dirección IP asignada, especificando si se ha asignado a la estación objetivo.
+
+
+
+Finalmente, durante el proceso de inicialización de la red SAP, la función wifi\_init\_softap utiliza el publicador para informar de los diversos estados del proceso, incluyendo el inicio, cualquier error durante la inicialización y la finalización del proceso.
+
+\subsection{Manejo de la Conexión WiFi}
+
+El ESP32 se configura como un Soft Access Point (SAP) (consulte la sección \ref{section:generalenvironment}), creando una red WiFi a la que se pueden conectar otros dispositivos. La finalidad de esta red es facilitar la comunicación entre la cámara y los demás nodos del sistema. El ESP32 publica información sobre los eventos de la red a través de un tema en micro-ROS, como la conexión y desconexión de estaciones, así como la asignación de direcciones IP a las mismas.
+
+
+
+El manejador de eventos WiFi, la función \texttt{wifi\_event\_handler\_sap}, se invoca cuando ocurren eventos específicos en la conexión WiFi. Dependiendo del tipo de evento, la función realiza acciones distintas:
+
+\begin{itemize}
+    \item Cuando una estación se conecta al SAP, se desencadena el evento
+    
+    \texttt{WIFI\_EVENT\_AP\_STACONNECTED}. Aquí, se obtiene y publica la dirección MAC de la estación conectada.
+    \item El evento \texttt{WIFI\_EVENT\_AP\_STADISCONNECTED} se activa cuando una estación se desconecta del SAP. En este escenario, se publica un mensaje informando de la desconexión. Si la estación desconectada corresponde a la \texttt{target\_mac}, se envía un mensaje adicional notificando que la estación objetivo se ha desconectado, y se marca la variable \texttt{sap\_ip\_target\_assigned} como false.
+    \item Al asignarse una dirección IP a una estación conectada al SAP, se genera el evento \texttt{IP\_EVENT\_AP\_STAIPASSIGNED}. Si la estación a la que se le ha asignado la IP coincide con la \texttt{target\_mac}, se guarda la IP asignada en la variable \texttt{sap\_ip\_target} y se configura \texttt{sap\_ip\_target\_assigned} como true. Luego, se publica un mensaje notificando que la estación objetivo ha obtenido una dirección IP.
+\end{itemize}
+
+Las funciones \texttt{get\_camera\_ip} y \texttt{get\_target\_ip} se utilizan para recuperar la dirección IP de la estación objetivo y verificar si a dicha estación se le ha asignado una IP, respectivamente.
+
+
+
+Finalmente, la función \texttt{wifi\_init\_softap} se encarga de la inicialización del SAP. Configura el SAP con los parámetros establecidos en la estructura \texttt{wifi\_config\_t}, registra el controlador de eventos \texttt{wifi\_event\_handler\_sap} para los eventos WiFi y el evento \texttt{IP\_EVENT\_AP\_STAIPASSIGNED}. Tras la configuración del SAP, se inicia el WiFi y se envía un mensaje que indica la finalización de la inicialización del SAP.
+
+
+
+\subsubsection{Control de la Cámara a través de WiFi}
+
+El sistema de control de la cámara debe estar diseñado para establecer una conexión automática a la red WiFi generada por el ESP32. La cámara tiene preconfigurada lacredenciales de la red WiFi del ESP32, lo que permite que se conecte de manera automática en cuanto se detecta la presencia de la red WiFi. Este enfoque asegura una conexión estable y confiable entre la cámara y el ESP32, facilitando el control y la comunicación sin necesidad de configuraciones adicionales.
+

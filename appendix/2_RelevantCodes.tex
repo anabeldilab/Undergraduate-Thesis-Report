@@ -1,0 +1,920 @@
+\section{Script Don't Destroy On Load}
+\label{appendix:dontdestroyonload}
+
+\begin{lstlisting}[label=lst:dontdestroyonload, caption={Código de Don't Destroy On Load}]
+using UnityEngine;
+
+public class DontDestroyOnLoad : MonoBehaviour {
+  public static DontDestroyOnLoad Instance;
+
+  void Awake() {
+    if (Instance == null) {
+      Instance = this;
+      DontDestroyOnLoad(gameObject);
+    } else {
+      Destroy(gameObject);
+    }
+  }
+}
+\end{lstlisting}
+
+
+\section{Script Ros2Start.cs}
+\label{appendix:ros2startscript}
+
+\begin{lstlisting}[label=lst:Ros2StartCode, caption={Código de Ros2Start}]
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using ROS2;
+using System.Collections.Concurrent;
+
+public class Ros2Start : MonoBehaviour {
+  public static Ros2Start Instance { get; private set; }
+
+  private ROS2UnityComponent ros2Unity;
+  private ROS2Node ros2Node;
+  public IPublisher<std_msgs.msg.Header> action_pub;
+  private ISubscription<std_msgs.msg.Header> esp32_sub;
+
+  public delegate void MessageReceivedHandler(std_msgs.msg.Header msg);
+  public event MessageReceivedHandler OnMessageReceived;
+
+  // Thread-safe queue for incoming messages
+  public ConcurrentQueue<std_msgs.msg.Header> messageQueue = new ConcurrentQueue<std_msgs.msg.Header>();
+
+  // Start is called before the first frame update
+  void Start() {
+    if (Instance != null) {
+      Destroy(gameObject);
+      return;
+    }
+    Instance = this;
+    DontDestroyOnLoad(gameObject);
+
+    Debug.Log("Starting ROS2 node");
+
+    ros2Unity = GetComponent<ROS2UnityComponent>();
+    if (ros2Unity.Ok()) {
+      ros2Node = ros2Unity.CreateNode("ROS2UnityPublisherSubscriberNode");
+      Debug.Log("Starting ROS2 node 2");
+    } else {
+      Debug.Log("Ros2Unity was not created OK");
+    }
+
+    if (ros2Unity.Ok()) {
+      action_pub = ros2Node.CreatePublisher<std_msgs.msg.Header>("action"); 
+      esp32_sub = ros2Node.CreateSubscription<std_msgs.msg.Header>("freertos_header_log", 
+        msg => {
+          Debug.Log("Unity listener heard: [" + msg.Frame_id + "]");
+          messageQueue.Enqueue(msg);
+        });
+      std_msgs.msg.Header msg = new std_msgs.msg.Header();
+      msg.Frame_id = "CON_/CAM";
+      Debug.Log(msg.Frame_id);
+      action_pub.Publish(msg);
+    } else {
+      Debug.Log("ROS2UnityComponent was not created OK");
+    }
+  }
+
+
+  void Update() {
+    while (messageQueue.TryDequeue(out std_msgs.msg.Header msg)) {
+        OnMessageReceived?.Invoke(msg);
+    }
+  }
+}
+\end{lstlisting}
+
+\section{Script Ros2SubscriberHandler.cs}
+\label{appendix:ros2subscriberhandler}
+
+\begin{lstlisting}[label=lst:Ros2SubscriberHandlerCode, caption={Código de Ros2SubscriberHandler}]
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class Ros2SubscriberHandler : MonoBehaviour
+{
+  public static Ros2SubscriberHandler Instance { get; private set; }
+
+  public Ros2Start ros2Subscriber;
+  public bool CameraEnabled { get; set; }
+  public string CameraIP { get; set; }
+  public bool ESP32Enabled { get; set; }
+
+  private void Awake() {
+    if (Instance != null) {
+      Destroy(gameObject);
+      return;
+    }
+    Instance = this;
+    DontDestroyOnLoad(gameObject);
+  }
+
+  void Start() {
+    CameraEnabled = false;
+    CameraIP = "No camera IP";
+    ESP32Enabled = false;
+  }
+
+  // Manage the event of receiving a message
+  void OnEnable() {
+    if (ros2Subscriber == null) {
+      ros2Subscriber = GetComponent<Ros2Start>();
+      if (ros2Subscriber != null) {
+        ros2Subscriber.OnMessageReceived += ProcessReceivedMessage;
+      }
+    } else {
+      ros2Subscriber.OnMessageReceived += ProcessReceivedMessage;
+    }
+  }
+
+  void ProcessReceivedMessage(std_msgs.msg.Header msg) {
+    string[] parts = msg.Frame_id.Split(' ');
+
+    if (parts.Length >= 5 && parts[0] == "Target" && parts[1] == "station" && parts[2] == "has" && parts[3] == "ip") {
+      CameraEnabled = true;
+      CameraIP = parts[4];
+      Debug.Log("IP camera: " + CameraIP);
+    }
+
+    if (parts.Length >= 3 && parts[0] == "Camera" && parts[1] == "ip:") {
+      CameraEnabled = true;
+      CameraIP = parts[2];
+      Debug.Log("IP camera: " + CameraIP);
+    }
+
+    if (parts.Length >= 3 && parts[0] == "Target" && parts[1] == "station" && parts[2] == "disconnected") {
+      CameraEnabled = false;
+      CameraIP = "No camera IP";
+      Debug.Log("Camera disabled");
+    }
+
+    if (parts.Length >= 4 && parts[0] == "Wifi" && parts[1] == "init" &&  parts[2] == "softap" && parts[3] == "finished") {
+      ESP32Enabled = true;
+      Debug.Log("ESP32 enabled");
+    }
+
+    if (parts.Length >= 4 && parts[0] == "Stopping" && parts[1] == "WiFi" &&  parts[2] == "in" && parts[3] == "base" && parts[4] == "station") {
+      ESP32Enabled = false;
+      Debug.Log("ESP32 disabled");
+      CameraIP = "No camera IP";
+      CameraEnabled = false;
+    }
+  }
+}
+\end{lstlisting}
+
+
+\section{Script Ros2Publish}
+\label{appendix:ros2publishscript}
+
+\begin{lstlisting}[label={lst:Ros2PublishCode}, caption={Código de Ros2Publish}]
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using ROS2;
+
+public class Ros2Publish : MonoBehaviour {
+  private Ros2Start ros2Publisher;
+  private IPublisher<std_msgs.msg.Header> action_pub;
+
+
+  void Update() {
+    if (ros2Publisher == null) {
+      ros2Publisher = Ros2Start.Instance;
+    }
+  }
+
+
+  public void OnUpNeuroButtonPress() {
+    if(ros2Publisher != null && ros2Publisher.action_pub != null) {
+      std_msgs.msg.Header msg = new std_msgs.msg.Header();
+        
+      msg.Frame_id = "ACT_/Up";
+      ros2Publisher.action_pub.Publish(msg);
+    }
+  }
+
+  // ... Omitiendo codigo por similitud
+}
+\end{lstlisting}
+
+\section{Script CameraInfo.cs}
+\label{appendix:camerainfoscript}
+
+\begin{lstlisting}[label={lst:CameraInfoCode}, caption={Código de CameraInfo}]
+
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class CameraInfo : MonoBehaviour {
+  public bool GetState() {
+    return Ros2SubscriberHandler.Instance.CameraEnabled;
+  }
+
+  public string GetIP() {
+    return Ros2SubscriberHandler.Instance.CameraIP;
+  }
+
+  public string GetUrl() {
+    if (GetState() == false) {
+      return "No camera URL";
+    }
+    return "http://" + GetIP() + ":81";
+  }
+
+  public string GetUrlApiRest() {
+    if (GetState() == false) {
+      return "No camera URL";
+    }
+    return "http://" + GetIP() + ":80";
+  }
+}
+\end{lstlisting}
+
+
+\section{Script CameraNetworkCommandController.cs}
+\label{appendix:CameraNetworkCommandController}
+
+\begin{lstlisting}[label={lst:CameraNetworkCommandControllerCode}, caption={Código de CameraNetworkCommandController}]
+
+using System.Collections;
+using UnityEngine;
+using UnityEngine.Networking;
+using TMPro;
+
+public class CameraNetworkCommandController : MonoBehaviour {
+
+  public CameraInfo cameraInfo;
+  public TMPro.TextMeshProUGUI responseText;
+  public TMPro.TMP_InputField setStateInputField;
+
+  public void SendRestartCommand() {
+    responseText.text = "";
+    if (cameraInfo.GetState() == false) {
+      Debug.Log("Camera is not enabled");
+      responseText.text = "Command error: Camera is not enabled";
+      return;
+    }
+    string command = "/app?app=0&value=0";
+    Debug.Log("Sending command: " + command);
+    StartCoroutine(SendCommand(command));
+  }
+
+
+  public void RequestCurrentState() {
+    responseText.text = "";
+    if (cameraInfo.GetState() == false) {
+      Debug.Log("Camera is not enabled");
+      responseText.text = "Command error: Camera is not enabled";
+      return;
+    }
+    string command = "/app?app=1&value=0";
+    Debug.Log("Sending command: " + command);
+    StartCoroutine(SendCommand(command));
+  }
+
+
+  public void SetState() {
+    responseText.text = "";
+    if (cameraInfo.GetState() == false) {
+      Debug.Log("Camera is not enabled");
+      responseText.text = "Command error: Camera is not enabled";
+      return;
+    }
+    int stateValue;
+    if(int.TryParse(setStateInputField.text, out stateValue)) {
+        Debug.Log(cameraInfo);
+        string command = "/app?app=2&value=" + stateValue;
+        Debug.Log("Sending command: " + command);
+        StartCoroutine(SendCommand(command));
+    } else {
+        Debug.Log("Input value is not a valid integer");
+        responseText.text = "Command error: Input value is not a valid integer";
+    }
+  }
+
+
+  public void StopStream() {
+    responseText.text = "";
+    if (cameraInfo.GetState() == false) {
+      Debug.Log("Camera is not enabled");
+      responseText.text = "Command error: Camera is not enabled";
+      return;
+    }
+    string command = "/app?app=3&value=0";
+    Debug.Log("Sending command: " + command);
+    StartCoroutine(SendCommand(command));
+  }
+
+
+  public void ContinueMode() {
+    responseText.text = "";
+    if (cameraInfo.GetState() == false) {
+      Debug.Log("Camera is not enabled");
+      responseText.text = "Command error: Camera is not enabled";
+      return;
+    }
+    string command = "/app?app=3&value=1";
+    Debug.Log("Sending command: " + command);
+    StartCoroutine(SendCommand(command));
+  }
+
+
+  public void RestartCamera() {
+    responseText.text = "";
+    if (cameraInfo.GetState() == false) {
+      Debug.Log("Camera is not enabled");
+      responseText.text = "Command error: Camera is not enabled";
+      return;
+    }
+    string command = "/app?app=4&value=0";
+    Debug.Log("Sending command: " + command);
+    StartCoroutine(SendCommand(command));
+  }
+
+
+  public void GetQR() {
+    responseText.text = "";
+    if (cameraInfo.GetState() == false) {
+      Debug.Log("Camera is not enabled");
+      responseText.text = "Command error: Camera is not enabled";
+      return;
+    }
+    string command = "/app?app=5&value=0";
+    Debug.Log("Sending command: " + command);
+    StartCoroutine(SendCommand(command));
+  }
+
+
+  private IEnumerator SendCommand(string command) {
+    string fullUrl = cameraInfo.GetUrlApiRest() + command;
+    Debug.Log(fullUrl);
+
+    using (UnityWebRequest webRequest = UnityWebRequest.Get(fullUrl)) {
+      webRequest.timeout = 60;
+
+      // Request and wait for the desired page.
+      yield return webRequest.SendWebRequest();
+
+      string[] pages = fullUrl.Split('/');
+      int page = pages.Length - 1;
+
+      switch (webRequest.result) {
+        case UnityWebRequest.Result.ConnectionError:
+        case UnityWebRequest.Result.DataProcessingError:
+          responseText.text = pages[page] + ": Error: " + webRequest.error;
+          break;
+        case UnityWebRequest.Result.ProtocolError:
+          responseText.text = pages[page] + ": HTTP Error: " + webRequest.error;
+          break;
+        case UnityWebRequest.Result.Success:
+          responseText.text = pages[page] + ":\nReceived: " + webRequest.downloadHandler.text;
+          break;
+      }
+    }
+  }
+}
+
+\end{lstlisting}
+
+
+
+\section{Software libre modificado: ImageStreamUrl.cs}
+\label{appendix:imagestreamurl}
+
+\begin{lstlisting}[label={lst:ImageStreamUrlCode}, caption={Código de ImageStreamUrl}]
+using System.IO;
+using System.Threading;
+using System.Collections;
+using System.Collections.Generic;
+using System.Net;
+using UnityEngine;
+
+public class ImageStreamUrl : MonoBehaviour {
+  public static ImageStreamUrl Instance { get; private set; }
+
+  private CameraInfo cameraInfo;
+  private TMPro.TextMeshProUGUI errorText;
+
+  [SerializeField] bool tryOnStart = false;
+
+  [SerializeField] RenderTexture renderTexture;
+
+  int MAX_RETRIES = 3;
+  int retryCount = 0;
+
+  byte[] nextFrame = null;
+
+  Thread worker;
+  int threadID = 0;
+
+  static System.Random randu;
+  List<BufferedStream> trackedBuffers = new List<BufferedStream>();
+
+  private void Awake() {
+    if (Instance != null) {
+      Destroy(gameObject);
+      return;
+    }
+    Instance = this;
+    DontDestroyOnLoad(gameObject);
+  }
+
+  public void Initialize(CameraInfo camInfo, TMPro.TextMeshProUGUI errText) {
+    cameraInfo = camInfo;
+    errorText = errText;
+  }
+
+  void Start() {
+    randu = new System.Random(Random.Range(0, 65536));
+    if (tryOnStart) {
+      StartStream();
+      Debug.Log("Stream initialized");
+    }
+  }
+
+
+  private void Update() {
+    if (nextFrame != null) {
+      SendFrame(nextFrame);
+      nextFrame = null;
+    }
+  }
+
+
+  private void OnDestroy() {
+    foreach (var b in trackedBuffers) {
+      if (b != null) {
+        b.Close();
+      }
+    }
+  }
+
+
+  public void StartStream() {
+    if (!cameraInfo.GetState()) {
+      errorText.text = "Camera is not enabled";
+      return;
+    }
+    string url = cameraInfo.GetUrl();
+    retryCount = 0;
+    StopAllCoroutines();
+    foreach (var b in trackedBuffers) {
+      b.Close();
+    }
+    worker = new Thread(() => ReadMJPEGStreamWorker(threadID = randu.Next(65536), url));
+    worker.Start();
+  }
+
+
+  void ReadMJPEGStreamWorker(int id, string url) {
+    var webRequest = WebRequest.Create(url);
+    webRequest.Method = "GET";
+    List<byte> frameBuffer = new List<byte>();
+
+    int lastByte = 0x00;
+    bool addToBuffer = false;
+
+    BufferedStream buffer = null;
+    try {
+      Stream stream = webRequest.GetResponse().GetResponseStream();
+      buffer = new BufferedStream(stream);
+      trackedBuffers.Add(buffer);
+    }
+    catch (System.Exception ex) {
+      errorText.text = "Error: " + ex.Message;
+      Debug.LogError(ex);
+    }
+    int newByte;
+    while (buffer != null) {
+      if (threadID != id) {
+        return;
+      }
+      if (!buffer.CanRead) {
+        Debug.LogError("Can't read buffer!");
+        break;
+      }
+
+      newByte = -1;
+
+      try {
+        newByte = buffer.ReadByte();
+      }
+      catch {
+        errorText.text = "Error: " + "Stream read error";
+        break;
+      }
+
+      if (newByte < 0) {
+        continue;
+      }
+
+      if (addToBuffer) {
+        frameBuffer.Add((byte)newByte);
+      }
+
+      if (lastByte == 0xFF) {
+        if (!addToBuffer) {
+          if (IsStartOfImage(newByte)) {
+            addToBuffer = true;
+            frameBuffer.Add((byte)lastByte);
+            frameBuffer.Add((byte)newByte);
+          }
+        } else {
+          if (newByte == 0xD9) {
+            frameBuffer.Add((byte)newByte);
+            addToBuffer = false;
+            nextFrame = frameBuffer.ToArray();
+            frameBuffer.Clear();
+          }
+        }
+      }
+      lastByte = newByte;
+    }
+
+    if (retryCount < MAX_RETRIES) {
+      retryCount++;
+      Debug.LogFormat("[{0}] Retrying Connection {1}...", id, retryCount);
+      foreach (var b in trackedBuffers)
+        b.Dispose();
+      trackedBuffers.Clear();
+      worker = new Thread(() => ReadMJPEGStreamWorker(threadID = randu.Next(65536), url));
+      worker.Start();
+    }
+  }
+
+
+  bool IsStartOfImage(int command) {
+    switch (command) {
+      case 0x8D:
+        Debug.Log("Command SOI");
+        return true;
+      case 0xC0:
+        Debug.Log("Command SOF0");
+        return true;
+      case 0xC2:
+        Debug.Log("Command SOF2");
+        return true;
+      case 0xC4:
+        Debug.Log("Command DHT");
+        break;
+      case 0xD8:
+        return true;
+      case 0xDD:
+        Debug.Log("Command DRI");
+        break;
+      case 0xDA:
+        Debug.Log("Command SOS");
+        break;
+      case 0xFE:
+        Debug.Log("Command COM");
+        break;
+      case 0xD9:
+        Debug.Log("Command EOI");
+        break;
+    }
+    return false;
+  }
+
+
+  void SendFrame(byte[] bytes) {
+    Texture2D texture2D = new Texture2D(2, 2);
+    texture2D.LoadImage(bytes);
+    if (texture2D.width == 2) {
+      errorText.text = "Error: " + "Bad image data";
+      return;
+    }
+    Graphics.Blit(texture2D, renderTexture);
+    Destroy(texture2D);
+  }
+}
+
+\end{lstlisting}
+
+\section{pan\_tilt\_controller (header)}
+\label{appendix:pantiltcontrollerheader}
+
+\begin{lstlisting}
+#pragma once
+
+#include <stdio.h>
+#include <unistd.h>
+#include <stdint.h>
+#include <time.h>
+#include <string.h>
+
+#ifdef ESP_PLATFORM
+#include "freertos/FreeRTOS.h"
+#include "freertos/task.h"
+#include "driver/ledc.h"
+#endif
+
+#define SERVO_MIN_DUTY  ((uint16_t)((0.56666 / 20.0) * (32768.0 - 1.0)))  // duty cycle for min grade
+#define SERVO_MAX_DUTY  ((uint16_t)((2.24444 / 20.0) * (32768.0 - 1.0)))  // duty cycle for max grade  (2^15) duty resolution
+#define SERVO_MIDDLE_DUTY  ((uint16_t)((1.36666 / 20.0) * (32768.0 - 1.0)))  // duty cycle for middle grade  (2^15) duty resolution
+#define SERVO_MAX_ANGLE 180
+#define SERVO_MIN_ANGLE 0
+
+typedef struct {
+  uint8_t is_initialized;
+  uint8_t freq_hz;
+  uint8_t duty_resolution;
+} TimerState;
+
+typedef struct {
+  uint8_t is_initialized;
+  uint8_t timer;
+  uint8_t channel;
+  uint8_t gpio_num;
+  uint16_t angle;
+  uint32_t duty;
+} ServoState;
+
+typedef struct {
+  ServoState horizontal_servo;
+  ServoState vertical_servo; 
+} PanTiltState;
+
+extern TimerState timers[4];
+extern PanTiltState pan_tilt_state;
+
+void default_pan_tilt_init(void);
+void pan_tilt_init(uint8_t timer, uint8_t freq_hz, uint8_t channel_horizontal, uint8_t channel_vetical, uint8_t gpio_horizontal, uint8_t gpio_vertical);
+void pan_tilt_deinit(void);
+
+void set_horizontal_angle(int16_t angle);
+void set_vertical_angle(int16_t angle);
+\end{lstlisting}
+
+\section{pan\_tilt\_controller}
+\label{appendix:pantiltcontroller}
+
+\begin{lstlisting}
+#include "pan_tilt_controller.h"
+
+TimerState timers[4] = {0};
+PanTiltState pan_tilt_state = {0};
+
+void init_horizontal_servo(uint8_t channel_selected, uint8_t timer_selected, uint8_t gpio_num);
+void init_vertical_servo(uint8_t channel_selected, uint8_t timer_selected, uint8_t gpio_num);
+void init_pwm_timer(uint8_t timer_selected, uint8_t timer_freq_hz);
+void configure_timer(uint8_t timer_selected, uint8_t timer_freq_hz);
+void configure_servo(uint8_t channel_selected, uint8_t timer_selected, uint8_t gpio_num);
+void update_timer_state(uint8_t timer_selected, uint8_t timer_freq_hz);
+void update_horizontal_servo_state(uint8_t channel_selected, uint8_t timer_selected, uint8_t gpio_num);
+void update_vertical_servo_state(uint8_t channel_selected, uint8_t timer_selected, uint8_t gpio_num);
+void servo_deinit(uint8_t channel_selected);
+void timer_deinit(uint8_t timer_selected);
+
+void default_pan_tilt_init() {
+  pan_tilt_init(0, 50, 0, 1, 17, 16);
+  set_horizontal_angle(90);
+  set_vertical_angle(0);
+}
+
+void pan_tilt_init(uint8_t timer, uint8_t freq_hz, uint8_t channel_horizontal, uint8_t channel_vetical, uint8_t gpio_horizontal, uint8_t gpio_vertical) {
+  init_pwm_timer(timer, freq_hz);
+  init_horizontal_servo(channel_horizontal, timer, gpio_horizontal);
+  init_vertical_servo(channel_vetical, timer, gpio_vertical);
+}
+
+// Pan tilt desinstalation
+void pan_tilt_deinit(void) {
+  servo_deinit(pan_tilt_state.horizontal_servo.channel);
+  servo_deinit(pan_tilt_state.vertical_servo.channel);
+  timer_deinit(pan_tilt_state.horizontal_servo.timer);
+  memset(&pan_tilt_state, 0, sizeof(pan_tilt_state));
+}
+
+void set_horizontal_angle(int16_t angle) {
+  if (angle < SERVO_MIN_ANGLE) {
+    angle = SERVO_MIN_ANGLE;
+    return;
+  } else if (angle > SERVO_MAX_ANGLE) {
+    angle = SERVO_MAX_ANGLE;
+    return;
+  } else if (!pan_tilt_state.horizontal_servo.is_initialized) {
+    printf("Error: the horizontal servomotor isn't initialized.\n");
+    return;
+  }
+
+  uint32_t duty = ((angle * (SERVO_MAX_DUTY - SERVO_MIN_DUTY)) / SERVO_MAX_ANGLE) + SERVO_MIN_DUTY;
+  uint8_t channel = pan_tilt_state.horizontal_servo.channel;
+
+  pan_tilt_state.horizontal_servo.angle = angle;
+  pan_tilt_state.horizontal_servo.duty = duty;
+
+  ledc_set_duty(LEDC_HIGH_SPEED_MODE, channel, duty);
+  ledc_update_duty(LEDC_HIGH_SPEED_MODE, channel);  
+}
+
+void set_vertical_angle(int16_t angle) {
+  if (angle < SERVO_MIN_ANGLE) {
+    angle = SERVO_MIN_ANGLE;
+    return;
+  } else if (angle > SERVO_MAX_ANGLE - 30) {
+    angle = SERVO_MAX_ANGLE;
+    return;
+  } else if (!pan_tilt_state.vertical_servo.is_initialized) {
+    printf("Error: the vertical servomotor isn't initialized.\n");
+    return;
+  }
+
+  uint32_t duty = ((angle * (SERVO_MAX_DUTY - SERVO_MIN_DUTY)) / SERVO_MAX_ANGLE) + SERVO_MIN_DUTY;
+  uint8_t channel = pan_tilt_state.vertical_servo.channel;
+
+  if (duty < SERVO_MIN_DUTY || duty > SERVO_MAX_DUTY) {
+    printf("Error: the duty should be between %u and %u.\n", SERVO_MIN_DUTY, SERVO_MAX_DUTY);
+    return;
+  }
+
+  pan_tilt_state.vertical_servo.angle = angle;
+  pan_tilt_state.vertical_servo.duty = duty;
+
+  ledc_set_duty(LEDC_HIGH_SPEED_MODE, channel, duty);
+  ledc_update_duty(LEDC_HIGH_SPEED_MODE, channel);  
+}
+
+void init_horizontal_servo(uint8_t channel_selected, uint8_t timer_selected, uint8_t gpio_num) {
+  if (channel_selected > 7) {
+    printf("Error: The channel selected must be between 0 and 7.\n");
+    return;
+  }
+
+  if (timers[timer_selected].is_initialized) {
+    configure_servo(channel_selected, timer_selected, gpio_num);
+    update_horizontal_servo_state(channel_selected, timer_selected, gpio_num);
+  }
+}
+
+void init_vertical_servo(uint8_t channel_selected, uint8_t timer_selected, uint8_t gpio_num) {
+  if (channel_selected > 7) {
+    printf("Error: The channel selected must be between 0 and 7.\n");
+    return;
+  }
+
+  if (timers[timer_selected].is_initialized) {
+    configure_servo(channel_selected, timer_selected, gpio_num);
+    update_vertical_servo_state(channel_selected, timer_selected, gpio_num);
+  }
+}
+
+void init_pwm_timer(uint8_t timer_selected, uint8_t timer_freq_hz) {
+  if (timer_selected > 3) {
+    printf("Error: The timer selected must be between 0 and 3.\n");
+    return;
+  }
+  if (!timers[timer_selected].is_initialized) {
+    configure_timer(timer_selected, timer_freq_hz);
+    update_timer_state(timer_selected, timer_freq_hz);
+  } else {
+    printf("Error: The timer %d is already initialized at a frecuency of %d Hz.\n", timer_selected, timers[timer_selected].freq_hz);
+    return;
+  }
+}
+
+void configure_timer(uint8_t timer_selected, uint8_t timer_freq_hz) {
+  ledc_timer_config_t timer_conf;
+  timer_conf.duty_resolution = LEDC_TIMER_15_BIT; // resolution of PWM duty. Max duty is 32767
+  timer_conf.freq_hz = timer_freq_hz;
+  timer_conf.speed_mode = LEDC_HIGH_SPEED_MODE;
+  timer_conf.timer_num = timer_selected;
+  ledc_timer_config(&timer_conf);
+}
+
+
+void configure_servo(uint8_t channel_selected, uint8_t timer_selected, uint8_t gpio_num) {
+  ledc_channel_config_t ledc_conf;
+  ledc_conf.channel = channel_selected;
+  ledc_conf.duty = SERVO_MIDDLE_DUTY;
+  ledc_conf.gpio_num = gpio_num;
+  ledc_conf.intr_type = LEDC_INTR_DISABLE;
+  ledc_conf.speed_mode = LEDC_HIGH_SPEED_MODE;
+  ledc_conf.timer_sel = timer_selected;
+  ledc_channel_config(&ledc_conf);
+}
+
+
+void servo_deinit(uint8_t channel_selected) {
+  ledc_stop(LEDC_HIGH_SPEED_MODE, channel_selected, 0);
+}
+
+void timer_deinit(uint8_t timer_selected) {
+  ledc_timer_rst(LEDC_HIGH_SPEED_MODE, timer_selected);
+}
+
+
+void update_timer_state(uint8_t timer_selected, uint8_t timer_freq_hz) {
+  timers[timer_selected].is_initialized = 1;
+  timers[timer_selected].freq_hz = timer_freq_hz;
+}
+
+
+void update_horizontal_servo_state(uint8_t channel_selected, uint8_t timer_selected, uint8_t gpio_num) {
+  pan_tilt_state.horizontal_servo.is_initialized = 1;
+  pan_tilt_state.horizontal_servo.timer = timer_selected;
+  pan_tilt_state.horizontal_servo.channel = channel_selected;
+  pan_tilt_state.horizontal_servo.gpio_num = gpio_num;
+  pan_tilt_state.horizontal_servo.angle = (SERVO_MAX_ANGLE + SERVO_MIN_ANGLE) / 2;
+  pan_tilt_state.horizontal_servo.duty = SERVO_MIDDLE_DUTY;
+}
+
+
+void update_vertical_servo_state(uint8_t channel_selected, uint8_t timer_selected, uint8_t gpio_num) {
+  pan_tilt_state.vertical_servo.is_initialized = 1;
+  pan_tilt_state.vertical_servo.timer = timer_selected;
+  pan_tilt_state.vertical_servo.channel = channel_selected;
+  pan_tilt_state.vertical_servo.gpio_num = gpio_num;
+  pan_tilt_state.vertical_servo.angle = (SERVO_MAX_ANGLE + SERVO_MIN_ANGLE) / 2;
+  pan_tilt_state.vertical_servo.duty = SERVO_MIDDLE_DUTY;
+}
+\end{lstlisting}
+
+\section{Tests del Pan-Tilt}
+\label{appendix:pantilttests}
+
+\begin{lstlisting}
+#include "unity.h"
+
+#include "pan_tilt_controller.h"
+
+void setUp(void) {
+  pan_tilt_init(0, 50, 0, 1, 17, 16);
+}
+
+void tearDown(void) {
+  pan_tilt_deinit();
+}
+
+TEST_CASE("Test max duty and min duty", "[pan_tilt_controller]") {
+  TEST_ASSERT_EQUAL(1638, SERVO_MIN_DUTY);
+  TEST_ASSERT_EQUAL(3276, SERVO_MAX_DUTY);
+}
+
+TEST_CASE("Test pan-tilt initializated", "[pan_tilt_controller]") {
+  int8_t timer_selected_state = timers[0].is_initialized;
+  int8_t horizontal_servo_state = pan_tilt_state.horizontal_servo.is_initialized;
+  int8_t vertical_servo_state = pan_tilt_state.vertical_servo.is_initialized;
+
+
+  TEST_ASSERT_EQUAL(1, timer_selected_state * horizontal_servo_state * vertical_servo_state);
+}
+
+TEST_CASE("Test initial horizontal angle", "[pan_tilt_controller]") {
+  set_horizontal_angle(0);
+
+  int16_t horizontal_angle_state = pan_tilt_state.horizontal_servo.angle;
+  int32_t horizontal_duty_state = pan_tilt_state.horizontal_servo.duty;
+
+  TEST_ASSERT_EQUAL(0, horizontal_angle_state);
+  TEST_ASSERT_EQUAL(SERVO_MIN_DUTY, horizontal_duty_state);
+}
+
+TEST_CASE("Test horizontal angle", "[pan_tilt_controller]") {
+
+  set_horizontal_angle(90);
+
+  int16_t horizontal_angle_state = pan_tilt_state.horizontal_servo.angle;
+  int32_t horizontal_duty_state = pan_tilt_state.horizontal_servo.duty;
+
+  TEST_ASSERT_EQUAL(90, horizontal_angle_state);
+  TEST_ASSERT_EQUAL(SERVO_MIN_DUTY + 819, horizontal_duty_state);
+}
+
+TEST_CASE("Test initial vertical angle", "[pan_tilt_controller]") {
+
+  set_vertical_angle(0);
+
+  int16_t vertical_angle_state = pan_tilt_state.vertical_servo.angle;
+  int32_t vertical_duty_state = pan_tilt_state.vertical_servo.duty;
+
+  TEST_ASSERT_EQUAL(0, vertical_angle_state);
+  TEST_ASSERT_EQUAL(SERVO_MIN_DUTY, vertical_duty_state);
+}
+
+TEST_CASE("Test vertical angle", "[pan_tilt_controller]") {
+
+  set_vertical_angle(15);
+
+  int16_t vertical_angle_state = pan_tilt_state.vertical_servo.angle;
+  int32_t vertical_duty_state = pan_tilt_state.vertical_servo.duty;
+
+  TEST_ASSERT_EQUAL(15, vertical_angle_state);
+  TEST_ASSERT_EQUAL(SERVO_MIN_DUTY + 136, vertical_duty_state);
+}
+
+TEST_CASE("Test increment movement", "[pan_tilt_controller]") {
+  pan_tilt_deinit();
+  default_pan_tilt_init();
+  set_vertical_angle(pan_tilt_state.vertical_servo.angle - 10); // Up
+
+  int16_t vertical_angle_state = pan_tilt_state.vertical_servo.angle;
+
+  TEST_ASSERT_EQUAL(80, vertical_angle_state);
+}    
+\end{lstlisting}

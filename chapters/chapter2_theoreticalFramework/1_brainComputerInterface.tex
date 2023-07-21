@@ -1,0 +1,57 @@
+\section{Interfaz cerebro-computador: definición y tecnología}
+
+Los sistemas de interfaces cerebro-computadora surgieron como una respuesta a la necesidad de agregar nuevas formas de interacción más allá de las convencionales, con el objetivo de brindar soluciones diferentes y efectivas. En particular, los BCIs no invasivos son de interés debido a su accesibilidad, seguridad y facilidad de uso, sin necesidad de procedimientos quirúrgicos. La eficacia de estos sistemas se basa en gran medida en su capacidad para detectar y registrar la actividad eléctrica del cerebro, siendo el electroencefalograma (EEG) uno de los métodos más utilizados. Esto conlleva a pagar el precio de obtener señales más pobres con respecto a los métodos invasivos.
+
+
+
+En este sentido, los sistemas BCI enfocan su atención en regiones específicas del cerebro, dependiendo de su propósito. Esta especificidad es de particular relevancia en el contexto de la investigación de BCI.
+
+\subsection{Metodologías de BCI basados en EEG}
+
+Hay dos metodologías que se utilizan actualmente: los impulsos cerebrales relacionados con eventos (ERPs, por sus siglas en inglés) y el electroencefalograma oscilatorio (EEG oscillation).
+
+
+
+Los ERP son potenciales eléctricos generados por nuestro cerebro en respuesta a diversos eventos, ya sean cognitivos, sensoriales o motores. Estos ERPs actúan como señales eléctricas que nos brindan una visión interna de cómo el cerebro procesa y responde a estímulos específicos.
+
+
+
+El segundo grupo de metodologías se basa en el análisis de la actividad oscilatoria del electroencefalograma (EEG). Estas técnicas implican la monitorizaci\'on continua de las diferentes frecuencias presentes en la señal cerebral, como las ondas alfa, beta, gamma, delta y theta, que suelen representar el nivel de consciencia/estrés que posee el individuo\cite{ABHANG201619}. A diferencia de los ERPs, las técnicas basadas en EEG oscilatorio no requieren un estímulo externo predefinido para llevar a cabo el análisis adecuado.
+
+
+
+Cabe resaltar que ambas metodologías tienen sus propias ventajas y aplicaciones en el estudio de la actividad cerebral. Los ERPs resultan especialmente útiles en investigaciones cognitivas y en la evaluación de funciones sensoriales - motoras. Por otro lado, los BCIs basados en EEG oscilatorio ofrecen la posibilidad de examinar patrones de actividad cerebral en diferentes frecuencias sin necesidad de un estímulo externo controlado, lo cual facilita su aplicación en contextos más flexibles y naturales.
+
+Dentro de los ERPs se encuentran:
+
+\begin{itemize}
+  \item BCIs basados en EEG P300: Estos BCIs miden el potencial evocado P300 que proporciona información valiosa sobre varios procesos cognitivos, como la memoria y la atención \cite{ComparisonAuditoryTemporalLobeEpilepsy}
+  
+  \item BCIs basados en Potencial Evocado Visual de Estado Estacionario, conocido por sus siglas en inglés SSVEP: Este enfoque detecta las respuestas cerebrales a la estimulación visual a frecuencias específicas y ha ganado popularidad debido a su alto rendimiento y robustez \cite{SSVEPBCI}
+\end{itemize}
+
+Dentro de los EEG oscilatorio se encuentra:
+
+\begin{itemize}
+  \item BCIs basados en EEG motor imagery (MI-BCI): Las MI-BCIs detectan las señales cerebrales generadas cuando el usuario imagina un movimiento específico. Han mostrado ser útiles en la medicina, particularmente en la rehabilitación motora de personas que han sufrido accidentes cerebrovasculares \cite{MotorImageryRoboticFeedback}
+\end{itemize}
+
+Dentro del marco de este Trabajo de fin de grado se usan los BCIs basados en SSVEP.
+
+\subsection{BCIs basados en SSVEP}
+
+Los BCI basados en SSVEP generan una respuesta utilizando frecuencias eléctricas constantes concentradas en el lóbulo occipital ocasionadas por estímulos visuales.
+
+
+
+Cuando se encuentra un estímulo visual con una frecuencia específica y registrada por el BCI, las células de la corteza visual se sincronizan y oscilan a la misma frecuencia. Esta sincronización se refleja en la actividad eléctrica del cerebro y se puede medir, como se mencionó anteriormente, utilizando técnicas de electroencefalografía (EEG).
+Los BCI basados en SSVEP generalmente registran las fluctuaciones eléctricas producidas por la actividad neuronal, mediante electrodos colocados en el cuero cabelludo. Es importante a destacar es que con este método se añade ruido a los resultados y dependiendo de la persona, por lo que hay que realizar cálculos para contrarrestarlo.
+
+
+
+
+Para capturar de manera eficaz la actividad cerebral, se utilizan estos electrodos y se transmiten a una base de datos. Estos electrodos se suelen agrupar en forma de casco para el usuario. 
+
+
+
+Se utilizan varios algoritmos y métodos de procesamiento de señales para extraer la información de SSVEP (Potenciales Evocados Visuales en Estado Estacionario) del ruido de fondo y de las señales cerebrales irrelevantes. Estos incluyen métodos de filtrado espacial, algoritmos de reconocimiento de frecuencia SSVEP y métodos de aprendizaje automático.

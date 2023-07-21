@@ -1,0 +1,26 @@
+\section{Compatibilidad de versiones}
+Dentro del complejo escenario de trabajo que implica la utilización de múltiples herramientas, librerías y tecnologías que no han sido diseñadas a la medida para su integración, emergen frecuentes problemas de incompatibilidad de versiones. Este entorno puede producir desafíos significativos, particularmente cuando las versiones no son compatibles entre sí, generando problemas y retrasos en el desarrollo. Uno de los casos más destacados de esta situación fue el relacionado con UnityRoboticsHub, que se detalla al final de este cap\'itulo.
+
+\section{Chocolatey}
+Durante el intento de instalaci\'on de ROS2 para Windows surgieron algunos obstáculos Tras numerosas dificultades, se identificó que la raíz del problema se encontraba en Chocolatey, la herramienta de gestión de paquetes utilizada. La dificultad surgió debido a que Chocolatey no desinstalaba correctamente los paquetes. Este inconveniente requirió una solución manual, que implicó la eliminación de los paquetes directamente en el editor de registros de Windows. Esta tarea, aunque solucionó el problema, destacó la necesidad de herramientas de gestión de paquetes más eficientes y confiables.
+
+\section{Configuración del WiFi: usbipd}
+Uno de los desafíos surgió en la configuración del WiFi utilizando usbipd. La dificultad principal se centró en la falta de conciencia de la necesidad de una red estable. El WiFi del ESP32 solo era visible mientras el agente de microros estaba en funcionamiento. Además, se observó que al conectarse al WiFi del ESP32, este se desconectaba y el WiFi se apagaba nuevamente. La causa de este problema radicaba en que la gestión del WiFi se realizaba dentro de la tarea de microros en el microcontrolador. Al cambiar de red, usbipd desconectaba los puertos, provocando problemas en Linux con la existencia de puertos simulados. Esto ocasionaba que el agente de microros dejara de funcionar y, por consiguiente, la tarea de microros dejara de ejecutarse, terminando con la gestión del WiFi.
+
+
+
+La solución a este problema consistió en colocar la gestión del WiFi fuera de la tarea de microros. Sin embargo, esto conllevó la desventaja de que el WiFi ya no podía ser controlado desde ROS2.
+
+\section{Inclusi\'on de im\'agenes de la cámara en Unity}
+El proceso de introducir la imagen de la cámara en Unity también presentó numerosos problemas. La fuente de la dificultad residía en que se estaba transmitiendo un flujo constante de paquetes MJPEG, que son imágenes. Inicialmente, se intentó utilizar assets de videos y assets de gestión de HTTP en Unity, pero estos enfoques no dieron resultados satisfactorios. La única solución viable consistió en dividir los paquetes y procesarlos para que Unity pudiera visualizarlos a medida que llegaban. Gracias al código abierto que se encontró, fue posible implementar esta parte del proyecto.
+
+\section{Trabajo de cambios}
+En términos generales, este proyecto ha estado caracterizado por la necesidad de realizar muchos cambios y adaptaciones en función de las circunstancias que surgían. Aunque este proceso ha sido desafiante, al final se han podido superar todas las adversidades, demostrando la capacidad de adaptación y resiliencia frente a las dificultades.
+
+
+\section{Imposibilidad de usar ciertos dispositivos}
+Inicialmente, se contempló la posibilidad de utilizar una silla de ruedas, lo que llevó a adaptar una interfaz específica para este propósito. Sin embargo, este plan tuvo que ser desechado debido a la falta de disponibilidad de sillas de ruedas robotizadas funcionales en la universidad. Posteriormente, se intentó utilizar un robot, pero este enfoque también resultó fallido debido a problemas en su sistema electrónico.
+
+
+\section{La persistencia de datos en Unity}
+El manejo de la persistencia de datos en Unity presentó una serie de desafíos significativos. Uno de los principales problemas radicó en entender cómo funcionaban los cambios de escena dentro de esta plataforma. En ocasiones, estos cambios resultaban en fallos inesperados y difíciles de rastrear. Adicionalmente, hubo dificultades al tratar de mantener ciertos elementos persistentes, ya que en algunos casos se mantenían más elementos de los planificados. Estos problemas se originaron por una comprensión insuficiente de cómo funciona la persistencia en Unity y cómo se debe manejar un script dentro de un GameObject de forma correcta. A pesar de la cantidad considerable de tiempo perdido en estos asuntos, finalmente se logró obtener un resultado satisfactorio.

@@ -1,0 +1,27 @@
+\section{ROS2}
+El objetivo de este proyecto es controlar sistemas electromecánicos mediante una interfaz de usuario en un ordenador convencional, haciendo uso de una aplicación distribuida con elementos de cómputo en diversos puntos. Dicha configuración requiere de un medio eficiente para comunicar comandos entre estos elementos, y aquí es donde ROS2\footnote{ROS2 Humble: \url{https://docs.ros.org/en/humble/index.html}} cobra relevancia.
+
+
+
+ROS2 es un conjunto de bibliotecas de software y herramientas que permite la creación de aplicaciones distribuidas, comúnmente utilizadas en el control de robots. Esta segunda generación de ROS se ha desarrollado para mantener y expandir las características más útiles de su predecesor, introduciendo al mismo tiempo mejoras significativas en áreas como el rendimiento, la seguridad y el soporte para sistemas embebidos.
+
+
+
+La arquitectura de ROS2 es más modular y flexible, permitiendo a los desarrolladores aprovechar y combinar diferentes bibliotecas y herramientas de manera más eficiente. Además, utiliza un modelo de comunicación basado en la publicación y suscripción, lo que facilita una comunicación eficaz entre diferentes dispositivos electromecánicos.
+
+
+
+En el contexto de este trabajo, ROS2 es particularmente relevante debido a su capacidad para integrarse con Unity3D a través de librerías como \texttt{ROS2ForUnity} o \texttt{Unity-Robotics-Hub}. De este modo, es posible desarrollar una aplicación en Unity3D que utilice la interacción proporcionada por un BCI para el control de dispositivos robóticos.
+
+
+\section{MicroROS}
+
+MicroROS\footnote{MicroROS: \url{https://micro.ros.org/}} es una adaptación de ROS2 especialmente diseñada para llevar sus capacidades a sistemas embebidos. Esta herramienta, optimizada para operar con restricciones de recursos de hardware y energía, permite extender el ecosistema de ROS2 a estos sistemas. Con MicroROS, los desarrolladores pueden programar estos sistemas utilizando las mismas herramientas y procedimientos empleados para las máquinas ROS2 más potentes.
+
+
+
+Además, MicroROS se integra de manera nativa con ROS2, permitiendo que los sistemas embebidos equipados con MicroROS interactúen con otros sistemas basados en ROS2, comportándose como nodos de ROS2 a través de la ejecución de un agente, aspecto que se explicará más adelante.
+
+
+
+En el contexto de este proyecto, MicroROS ofrece la posibilidad de incorporar directamente ROS2 en un microcontrolador, lo que abre la puerta a la manipulación directa del funcionamiento de los sistemas robóticos a nivel de hardware. Esto proporciona una gran flexibilidad y precisión para la implementación de aplicaciones robóticas complejas.

@@ -1,4 +1,4 @@
-\documentclass[spanish,a4paper,12pt,oneside]{extreport}
+\documentclass[spanish,a4paper,12pt,twoside,openright]{extreport}
 
 \usepackage[dvips]{graphicx}
 \usepackage[dvips]{epsfig}
@@ -10,6 +10,7 @@
 \SetKwRepeat{Do}{do}{while}
 
 \usepackage{multirow}
+\usepackage{adjustbox}
 \usepackage{array} 
 \usepackage{amsfonts}
 \usepackage{amsmath}
@@ -65,33 +66,38 @@
 \definecolor{delim}{RGB}{20,105,176}
 \colorlet{numb}{magenta!60!black}
 
-\lstdefinelanguage{json}{
-    basicstyle=\normalfont\ttfamily,
-    numbers=left,
-    numberstyle=\scriptsize,
-    stepnumber=1,
-    numbersep=8pt,
-    showstringspaces=false,
-    breaklines=true,
-    frame=lines,
-    backgroundcolor=\color{background},
-    literate=
-     *{0}{{{\color{numb}0}}}{1}
-      {1}{{{\color{numb}1}}}{1}
-      {2}{{{\color{numb}2}}}{1}
-      {3}{{{\color{numb}3}}}{1}
-      {4}{{{\color{numb}4}}}{1}
-      {5}{{{\color{numb}5}}}{1}
-      {6}{{{\color{numb}6}}}{1}
-      {7}{{{\color{numb}7}}}{1}
-      {8}{{{\color{numb}8}}}{1}
-      {9}{{{\color{numb}9}}}{1}
-      {:}{{{\color{punct}{:}}}}{1}
-      {,}{{{\color{punct}{,}}}}{1}
-      {\{}{{{\color{delim}{\{}}}}{1}
-      {\}}{{{\color{delim}{\}}}}}{1}
-      {[}{{{\color{delim}{[}}}}{1}
-      {]}{{{\color{delim}{]}}}}{1},
+\lstdefinelanguage{Csharp}{
+  morekeywords = {public, private, class, using, void, var, this, get, set, new, if, else, foreach, in, bool, int, string, float, double, static, return, true, false},
+  morecomment = [l]{//},
+  morecomment = [s]{/}{/},
+  morestring = [b]",
+  sensitive = true
+}
+
+\lstdefinestyle{basicStyle}{
+  basicstyle=\ttfamily\color{black},
+  commentstyle=\color{black},
+  tabsize=2
+}
+
+\lstset{
+  language=[Sharp]C,
+  basicstyle=\ttfamily\small,
+  commentstyle=\color{green},
+  keywordstyle=\color{blue},
+  stringstyle=\color{red},
+  tabsize=2,
+  columns=fixed,
+  breaklines=true,
+  frame=none,
+  showstringspaces=false,
+  showspaces=false,
+  showtabs=false,
+  xleftmargin=20pt,
+  framexleftmargin=20pt,
+  framexrightmargin=5pt,
+  framexbottommargin=4pt,
+  showstringspaces=false
 }
 
 \begin{document}
@@ -154,8 +160,7 @@
 \tableofcontents
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\newpage
-\thispagestyle{empty}
+\newpage{\pagestyle{empty}}
 
 \listoffigures
 
@@ -177,31 +182,72 @@
 \pagestyle{plain}
 
 \chapter{\LARGE Introducción}
-\label{chapter:one}
+\label{chapter:introduction}
 
 \input{chapters/chapter1_introduction/1_contextAndJustification}
-
 \input{chapters/chapter1_introduction/2_objectives}
-
 \input{chapters/chapter1_introduction/3_stateOfTheArt}
+\input{chapters/chapter1_introduction/4_research_methodology}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newpage{\pagestyle{empty}}
+\thispagestyle{empty}
+
+\chapter{\LARGE Marco Teórico}
+\label{chapter:theoreticalFramework}
+
+\input{chapters/chapter2_theoreticalFramework/1_brainComputerInterface}
+\input{chapters/chapter2_theoreticalFramework/2_NextMindFeatures}
+\input{chapters/chapter2_theoreticalFramework/3_pwmTheory}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \newpage{\pagestyle{empty}}
 \thispagestyle{empty}
 
-\chapter{\LARGE Técnicas y herramientas utilizadas}
-\label{chapter:dos}
+\chapter{\LARGE Herramientas y tecnologías}
+\label{chapter:toolsAndTechnologies}
 
-\input{chapters/TecnicasyHerramientas.tex}
+\input{chapters/chapter3_toolsAndTechnologies/1_BCINextMind}
+\input{chapters/chapter3_toolsAndTechnologies/2_Unity3D}
+\input{chapters/chapter3_toolsAndTechnologies/3_NextMindSDK}
+\input{chapters/chapter3_toolsAndTechnologies/4_ROS2}
+\input{chapters/chapter3_toolsAndTechnologies/5_ESP32}
+\input{chapters/chapter3_toolsAndTechnologies/6_PanTilt}
+\input{chapters/chapter3_toolsAndTechnologies/7_Camera}
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 \newpage{\pagestyle{empty}}
 \thispagestyle{empty}
 
-\chapter{\LARGE Desarrollo de nuevas funcionalidades}
-\label{chapter:tres}
+\chapter{\LARGE Desarrollo del proyecto}
+\label{chapter:projectDevelopment}
 
-\input{chapters/Desarrollo.tex}
+\input{chapters/chapter4_projectDevelopment/1_GeneralEnvironment}
+\input{chapters/chapter4_projectDevelopment/2_UnityInterface}
+\input{chapters/chapter4_projectDevelopment/3_ESP-IDFPanTilt}
+\input{chapters/chapter4_projectDevelopment/4_GeneralWorking}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newpage{\pagestyle{empty}}
+\thispagestyle{empty}
+
+\chapter{\LARGE Analisis de la experimentación y resultados obtenidos}
+\label{chapter:analysisTestAndResults}
+
+\input{chapters/chapter5_AnalysisTestsAndResults/1_AnalysisTestsAndResults}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newpage{\pagestyle{empty}}
+\thispagestyle{empty}
+
+\chapter{\LARGE Problemas y dificultades encontradas}
+\label{chapter:challengesanddifficulties}
+
+\input{chapters/chapter6_ChallengesAndDifficultiesEncountered/1_GeneralChallengesAndDifficultiesEncountered}
+\input{chapters/chapter6_ChallengesAndDifficultiesEncountered/2_unityRoboticsHubExperience}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \newpage{\pagestyle{empty}}
@@ -239,13 +285,34 @@
 
 \input{chapters/biblio.tex}
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 %\begin{thebibliography}{X}
 % Aquí figurará la bibliografía
 %\end{thebibliography}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\newpage{\pagestyle{empty}\cleardoublepage}
+\thispagestyle{empty}
+
+\begin{appendix}
+
+\chapter{\LARGE Preparación del entorno de desarrollo}
+\label{appendix:1}
+\input{appendix/appendix1_developmentEnvironment/1_NextMindSDK}
+\input{appendix/appendix1_developmentEnvironment/2_ROS2}
+\input{appendix/appendix1_developmentEnvironment/3_ESP-IDFAndMicroROS}
+\input{appendix/appendix1_developmentEnvironment/4_microROSAgent}
+\input{appendix/appendix1_developmentEnvironment/5_Ros2ForUnity}
+\input{appendix/appendix1_developmentEnvironment/6_Camera}
+
+
+\chapter{\LARGE Códigos relevantes del proyecto}
+\label{appendix:2}
+\input{appendix/2_RelevantCodes}
+
+\end{appendix}
 
 \end{document}
 

@@ -1,0 +1,15 @@
+\section{Experiencia con Unity-Robotics-Hub}
+
+Unity-Robotics-Hub fue la primera librería que se evaluó para ser utilizada para integrar ROS2 en Unity. Esta librería mostraba signos de robustez y de amplia utilización, lo cual indicaba que podía ser una opción viable.
+
+
+
+No obstante, se encontraron serios problemas, ya que la librería presentaba fallos desde las versiones tempranas del código. Existe la posibilidad de que estos problemas se deban a algún tipo de incompatibilidad con la SDK de NextMind.
+
+
+
+Se intentaron múltiples soluciones, como la modificación completa del código y el análisis de los registros de Unity. También se probaron las implementaciones de NextMind SDK y UnityRoboticsHub de manera independiente, observando que funcionaban correctamente por separado, pero no conjuntamente.
+
+
+
+Es una lastima que Unity-Robotics-Hub no haya funcionado de manera óptima, ya que, a pesar de funcionar a través de un intermediario, el código resultante era más legible y la carga para Unity no era tan elevada como con la implementación actual, que debe manejar ROS2 en su totalidad, generando nodos dentro de Unity.

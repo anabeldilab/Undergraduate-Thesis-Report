@@ -1,0 +1,36 @@
+\section{NextMind SDK}
+
+El SDK de NextMind\footnote{NextMind SDK \url{https://github.com/Snapchat/NextMind/l}} para Unity ofrece un conjunto de herramientas diseñadas para facilitar el desarrollo de juegos y aplicaciones que aprovechan la tecnología NextMind. Este SDK proporciona una API de alto nivel que abstrae a los desarrolladores del funcionamiento interno del BCI. Para el desarrollo de este trabajo, se ha hecho uso extensivo de esta SDK.
+
+
+
+El SDK de NextMind se centra principalmente en dos componentes esenciales: el NeuroTag y el NeuroManager.
+
+\subsection{NeuroTags}
+\label{subsection:NeuroTags}
+
+El NeuroTag es un componente que permite hacer que cualquier objeto en una aplicación sea interactuable con el BCI. En términos prácticos, los NeuroTags son elementos visuales en la interfaz de usuario que el dispositivo NextMind puede reconocer y seguir. Actualmente, el SDK puede manejar hasta 10 NeuroTags activos simultáneamente, aunque se espera que este número aumente en futuras versiones del SDK. En el marco de este proyecto se utilizaron NeuroTags en la interfaz para que mediante la interacción con esos NeuroTags, se enviara una orden determinada a los dispositivos electromecánicos. Un ejemplo de NeuroTag se puede ver en la Figura \ref{figure:nextmind-neurotag} mostrada anteriormente.
+
+\subsection{NeuroManager}
+\label{subsection:NeuroManager}
+
+El NeuroManager es el componente que gestiona la comunicación entre los NeuroTags presentes en la escena y el núcleo del motor de NextMind. Su función es facilitar la coordinación entre los diferentes NeuroTags y el procesamiento de las señales cerebrales captadas por el dispositivo NextMind. Este componente es esencial para cualquier proyecto que utilice NextMind.
+
+\subsection{Otras funcionalidades}
+
+Además de los NeuroTags y el NeuroManager, el SDK de NextMind ofrece una amplia gama de funciones adicionales que pueden ser utilizadas para personalizar las aplicaciones. Estas funciones permiten, por ejemplo, obtener información del sensor de NextMind (como el nivel de batería, el contacto, etc.), gestionar el comportamiento de escaneo de Bluetooth, simular entradas, entre otros. 
+
+
+
+El SDK también incluye varios tipos de ``assets'', divididos en dos categorías: los ``assets'' esenciales para construir una aplicación habilitada para NextMind y los ``assets'' de ejemplo que muestran las mejores prácticas para el uso del SDK.
+
+
+
+El SDK también incluye varios tipos de ``assets'', divididos en dos categorías:
+
+\begin{itemize}
+    \item Assets principales: son todos los archivos esenciales necesarios para crear una aplicación habilitada para NextMind. Encontrará dentro de las librerías principales que exponen las clases principales y algunos activos convenientes (prefabricados, sombreadores, componentes, herramientas, etc.).
+    \item Assets de ejemplo: muestra varios ejemplos de cómo usar el SDK, que enseñan las mejores prácticas (por ejemplo, cómo crear su aplicación de calibración personalizada o cómo etiquetar un objeto).
+\end{itemize}
+
+Estas características adicionales fueron empleadas en el proyecto para mandar una retroalimentación sobre el estado del casco BCI e implementar una calibración personalizada dentro de la aplicación.

@@ -1,33 +1,20 @@
-\section{Antecedentes}
+\section{Estado del arte}
 
-\subsection{Introducción}
-Los sistemas de interfaces cerebro-computadora (BCI, por sus siglas en inglés) surgieron como una respuesta a la necesidad de agregar nuevas formas de interacción más allá de las convencionales, con el objetivo de brindar soluciones diferentes y efectivas. En particular, los BCIs no invasivos son de interés debido a su accesibilidad, seguridad y facilidad de uso, sin necesidad de procedimientos quirúrgicos. La eficacia de estos sistemas no invasivos se basa en gran medida en la detección y registro de la actividad eléctrica del cerebro, siendo el electroencefalograma (EEG) uno de los métodos más utilizados. Cada interfaz BCI tiene en punto de mira zonas del cerebro concretas según su finalidad, lo cual es particularmente relevante en el contexto de esta investigación.
-
-\subsection{Enfoques de BCI basados en EEG}
-
-Existen varios enfoques de BCI no invasivos que emplean la tecnología EEG, cada uno de los cuales ha demostrado su utilidad en distintas aplicaciones. Algunos de los más relevantes son:
-
-\begin{itemize}
-  \item BCIs basados en EEG motor imagery (MI-BCI): Los MI-BCIs detectan las señales cerebrales generadas cuando el usuario imagina un movimiento específico. Han mostrado ser útiles en la medicina, particularmente en la rehabilitación motora de personas que han sufrido accidentes cerebrovasculares \cite{MotorImageryRoboticFeedback}.
-  \item BCIs basados en EEG P300: Estos BCIs miden el potencial evocado P300, una respuesta cerebral a estímulos cognitivos específicos. El P300 proporciona información valiosa sobre varios procesos cognitivos, como la memoria y la atención \cite{ComparisonAuditoryTemporalLobeEpilepsy}.
-  \item BCIs basados en Steady-State Visual Evoked Potential, SSVEP: Este enfoque detecta las respuestas cerebrales a la estimulación visual a frecuencias específicas y ha ganado popularidad debido a su alto rendimiento y comunicación confiable \cite{SSVEPBCI}.
-  \item BCIs híbridos: Algunos sistemas BCI combinan EEG con otras técnicas, como la inteligencia artificial cognitiva, para mejorar su rendimiento. Estos sistemas son capaces de procesar el lenguaje natural y transmitir señales neuronales a un altavoz con inteligencia artificial \cite{ThikingOutLoudOpenAccessEEGBasedBCI}.
-\end{itemize}
-
-\subsection{Revisión literaria}
-El uso de los BCI para el control de dispositivos está ganando popularidad debido a su potencial para mejorar la vida diaria de las personas con discapacidad. Este proyecto se enfoca en los que utilizan cascos EEG de tipo malla y, particularmente, en aquellos basados en SSVEP, dada su fiabilidad y alto rendimiento.
+El uso de los BCI para el control de dispositivos está ganando popularidad debido a su potencial para mejorar la vida diaria de las personas con movilidad limitada. También aparecen nuevas ideas para su uso habitual, como por ejemplo, siendo parte de la interfaz de usuario en sistemas de realidad virtual (VR) o realidad aumentada (AR). Este proyecto se centra en los métodos que utilizan cascos EEG de tipo malla y, particularmente, en aquellos basados en SSVEP, dada su fiabilidad y alto rendimiento.
 Específicamente, se utilizará el dispositivo NextMind, una BCI existente en el mercado que utiliza el enfoque SSVEP. La selección de este dispositivo se basa en su accesibilidad, robustez y comodidad.
 
-\bigskip
 
-Un estudio relevante es "\textit{Robotic Arm with Brain}", que utiliza un BCI no invasivo basado en EEG para controlar un brazo robótico \cite{RoboticArmWithBrain}. Esta investigación proporciona un marco sobre cómo se pueden utilizar los BCIs para controlar dispositivos físicos de manera efectiva.
 
-\bigskip
+Un estudio relevante es ``\textit{Robotic Arm with Brain}'', que utiliza una BCI no invasiva basada en EEG para controlar un brazo robótico \cite{RoboticArmWithBrain} Esta investigación proporciona un marco sobre cómo se pueden utilizar los BCIs para controlar dispositivos físicos de manera efectiva.
 
-Por otra parte, el estudio "\textit{A New SSVEP based BCI Application on the Mobile Robot in A Maze Game}", se centra en el desarrollo de un juego de laberinto controlado por una BCI basada en SSVEP con el objetivo de mejorar la calidad de vida de las personas con enfermedad de las neuronas motoras. A la interfaz cerebro-computador se le proporcionan 4 opciones de movimiento como "en sentido antihorario", "en sentido horario", "hacia adelante" y "hacia atrás". Para facilitar esas elecciones se utiliza un monitor LCD para mostrar iconos que parpadean a diferentes frecuencias. Este enfoque aprovecha la respuesta de las neuronas en el lóbulo occipital, encargado de procesar los estímulos visuales, que se sincronizan con la frecuencia de la luz percibida por los ojos. Los resultados demostraron que este control basado en SSVEP puede brindar entretenimiento a las personas con dicha enfermedad en el contexto del juego de laberinto.\cite{SSVEPBCIRobotMazeGame}. La relación con el presente trabajo radica en el funcionamiento del BCI, que es similar en términos de los estímulos utilizados, así como en las opciones de movimiento proporcionadas.
 
-\bigskip
 
-Finalmente, el estudio "\textit{A Telepresence Mobile Robot Controlled With a Noninvasive Brain–Computer Interface}" presenta un sistema de telepresencia basado en EEG que permite a los usuarios tener presencia en entornos remotos a través de un robot móvil con acceso a Internet. El sistema utiliza una BCI basada en el potencial P300 y un robot móvil con capacidades de navegación autónoma y orientación de la cámara. \cite{TelepresenceMobileRobotBCI}. La relación con el trabajo de fin de grado se encuentra en el concepto de la telepresencia, donde se busca utilizar dispositivos controlados por una interfaz cerebro-computadora para lograr una presencia remota en entornos a través de un robot móvil. En este proyecto, se aplicarán ideas similares para permitir a los usuarios controlar objetos y tener una presencia remota mediante la interfaz cerebro-computadora.
+Por otra parte, el estudio ``\textit{A New SSVEP based BCI Application on the Mobile Robot in A Maze Game}'', se centra en el desarrollo de un juego de laberinto controlado por una BCI basada en SSVEP con el objetivo de mejorar la calidad de vida de las personas con enfermedad de las neuronas motoras. A la interfaz cerebro-computador se le proporcionan 4 opciones de movimiento:  ``girar en sentido antihorario'', ``girar en sentido horario'', ``desplazarse hacia adelante'' y ``desplazarse hacia atrás''. Para facilitar esas elecciones se utiliza un monitor LCD para mostrar iconos que parpadean a diferentes frecuencias. Esta técnica aprovecha la respuesta de las neuronas en el lóbulo occipital, encargado de procesar los estímulos visuales, que se sincronizan con la frecuencia de la luz percibida por los ojos. Los resultados demostraron que este control basado en SSVEP puede brindar entretenimiento a las personas con dicha enfermedad en el contexto del juego de laberinto.\cite{SSVEPBCIRobotMazeGame} La relación con el presente trabajo radica en el funcionamiento del BCI, que es similar en términos de los estímulos utilizados, así como en las opciones de movimiento proporcionadas.
+
+
+
+Finalmente, el estudio ``\textit{A Telepresence Mobile Robot Controlled With a Noninvasive Brain–Computer Interface}'' presenta un sistema de telepresencia basado en EEG que permite a los usuarios tener presencia en entornos remotos a través de un robot móvil con acceso a Internet. El sistema utiliza una BCI basada en el potencial P300 y un robot móvil con capacidades de navegación autónoma y orientación de la cámara \cite{TelepresenceMobileRobotBCI} La relación con el trabajo de fin de grado se encuentra en el concepto de la telepresencia, donde se busca utilizar dispositivos controlados por una interfaz cerebro-computadora para lograr una presencia remota en entornos a través de un robot móvil. En este proyecto, se aplicarán ideas similares para permitir a los usuarios controlar objetos y tener una presencia remota mediante la interfaz cerebro-computadora.
+
+
 
 La revisión de los estudios anteriores, especialmente aquellos relacionados con BCIs que utilizan el enfoque SSVEP, ha sido muy útil. En particular, el dispositivo NextMind, que se utiliza en este proyecto, ha proporcionado un marco útil para el diseño y la implementación del estudio.

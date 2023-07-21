@@ -1,0 +1,30 @@
+\subsection{Modulación por Ancho de Pulso (PWM)}
+\label{subsection:pwm}
+
+La Modulación por Ancho de Pulso (PWM, por sus siglas en inglés) es una técnica empleada para controlar la cantidad de energía entregada a un dispositivo electrónico mediante la manipulación del ancho de los pulsos en una señal de onda. En este proyecto, esta técnica es esencial para el control preciso del mecanismo Pan-Tilt.
+
+
+
+El rango de ciclo de trabajo (duty cycle) para la PWM generalmente va desde 0 a 32767, esto corresponde a una resolución de 15 bits. Sin embargo, en el caso del control de un servomotor, este rango completo puede no ser aprovechado\cite{Espressif2023}
+
+
+
+En muchos servomotores, un pulso de 1 milisegundo (ms) se traduce en un ángulo de 0 grados, mientras que un pulso de 2 ms se traduce en un ángulo de 180 grados. Estos pulsos se aplican en un período total de 20 ms, que corresponde a una frecuencia de 50 Hz, comúnmente encontrada en servomotores.
+
+
+
+Usando la resolución máxima de 15 bits, el valor del duty cycle para un pulso de 1 ms puede ser calculado de la siguiente manera:
+
+\[
+duty_{1ms} = \frac{1ms}{20ms} \times (2^{15} - 1) \approx 1638
+\]
+
+Para un pulso de 2 ms, el cálculo es similar:
+
+\[
+duty_{2ms} = \frac{2ms}{20ms} \times (2^{15} - 1) \approx 3277
+\]
+
+
+
+Por ende, para la mayoría de los servomotores, el rango útil de los valores del ciclo de trabajo estaría aproximadamente entre 1638 y 3277. Cabe señalar que este rango puede variar en función de las especificaciones concretas de cada servomotor, por lo que es imprescindible revisar siempre la documentación correspondiente al dispositivo en cuestión. En muchas ocasiones, es útil comprobar de forma empírica cuáles son los límites reales del servomotor.

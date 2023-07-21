@@ -1,0 +1,154 @@
+\section{ESP-IDF}
+Para poder instalar el ESP-IDF release 5.1 de Linux en ESP32, se necesita instalar el siguiente software:
+
+\begin{itemize}
+  \item Conjunto de herramientas de compilación para el ESP32.
+  \item Herramientas de construcción: CMake y Ninja, para construir una aplicación completa para ESP32.
+  \item ESP-IDF, que contiene esencialmente la API (bibliotecas de software y código fuente) para ESP32, así como scripts para operar el conjunto de herramientas.
+\end{itemize}
+
+\subsection{Instalación de ESP-IDF}
+La instalación del ESP-IDF se debe llevar a cabo siguiendo las instrucciones de su documentación oficial\footnote{ESP-IDF Get Started Guide: \url{https://docs.espressif.com/projects/esp-idf/en/latest/esp32/get-started/}}. La versión instalada en este proyecto es la release 5.1.
+
+
+
+Aunque la documentación del ESP-IDF proporciona instrucciones de instalación para varios sistemas operativos, en este proyecto se decidió instalarlo en Linux. Esta decisión se tomó en las etapas iniciales del proyecto, incluso antes de considerar el uso de ROS 2 en Windows. En consecuencia, toda la gestión del ESP32 se realiza desde Linux, aprovechando la instalación existente de ROS 2 en la WSL.
+
+
+
+Además, cabe destacar que micro-ROS no proporciona instrucciones para su instalación en Windows y no se puede garantizar que el proceso de compilación funcione correctamente en ese sistema operativo. Esto también influenció la elección de utilizar Linux para el desarrollo del proyecto.
+
+\subsection{Consideraciones con la WSL}
+\label{WLS-considerations}
+Es importante tener en cuenta que los puertos USB están gestionados por el sistema operativo Windows. Para hacerlos accesibles desde la WSL, se utilizó el programa usbipd\footnote{USBIPD-WIN project: \url{https://learn.microsoft.com/en-us/windows/wsl/connect-usb}} en Windows. Primero, se listan los puertos USB conectados para obtener el BUSID con el siguiente comando:
+
+\begin{verbatim}
+usbipd wsl list
+\end{verbatim}
+
+Luego, se ejecuta el siguiente comando para ``atar'' el puerto USB a la WSL:
+
+\begin{verbatim}
+usbipd wsl attach --busid (busid)
+\end{verbatim}
+
+Los puertos en sistemas Linux se ubican en el directorio \textbf{/dev/} y suelen tener nombres del tipo \texttt{ttyUSBX}, donde X es un número entero positivo.
+
+
+
+Es necesario otorgar permisos de lectura y escritura al puerto para su uso. Para ello, se puede utilizar el siguiente comando:
+
+\begin{verbatim}
+sudo chmod a+rw /dev/ttyUSBX
+\end{verbatim}
+
+En este comando, es importante reemplazar \texttt{ttyUSBX} con el nombre del puerto que se desea utilizar.
+
+\subsection{Creación de componentes}
+\label{subsection:componentcreation}
+
+\textbf{Requisitos para la creación componentes:}
+\begin{enumerate}
+\item \textbf{Modularidad:} Ser una unidad funcionalmente independiente y cohesiva.
+\item \textbf{Reutilización:} Ser capaz de utilizarse en diferentes contextos y proyectos.
+\item \textbf{Interfaz bien definida:} Especificar cómo interactuar con el componente.
+\item \textbf{Encapsulación:} Ocultar los detalles internos de implementación y proporcionar una interfaz de alto nivel.
+\item \textbf{Independencia:} No depender directamente de otros componentes.
+\item \textbf{Coherencia y cohesión:} Tener una estructura y diseño coherentes, así como una funcionalidad interna relacionada.
+\item \textbf{Testeabilidad:} Ser fácil de probar de forma unitaria y escribir pruebas automatizadas.
+\item \textbf{Documentación:} Estar debidamente documentado con información relevante.
+\end{enumerate}
+
+En el contexto de ESP-IDF, añadir un componente es tan sencillo como ponerlo en el directorio de components.
+
+Para que se añada correctamente hay que añadir en el CMakeLists.txt de fuera lo siguiente:
+
+\begin{lstlisting}[label={lst:CMakeLists-extern-ESP-IDF}, caption=CMakeLists del repositorio ESP-IDF]
+cmake_minimum_required(VERSION 3.5)
+
+set (EXTRA_COMPONENT_DIRS "components/")
+
+include($ENV{IDF_PATH}/tools/cmake/project.cmake)
+project(pan-tilt-esp32)
+\end{lstlisting}
+
+Luego dentro de cada componente hay que tener otro CMakeLists.txt con lo siguiente:
+\begin{lstlisting}[label={lst:CMakeLists-component-ESP-IDF}, caption=CMakeLists del componente ESP-IDF]
+idf_component_register(
+    SRCS "script1.c" "script2.c"
+    INCLUDE_DIRS "."
+    REQUIRES <alguna dependencia>
+)
+\end{lstlisting}
+
+También se le puede añadir un directorio de test para testear el componente usando U-TTS.
+
+
+
+Dentro de ese directorio debe haber otro CMakeLists.txt:
+\begin{lstlisting}[label={lst:CMakeLists-component-tests}, caption=CMakeLists de los tests del componente]
+idf_component_register(SRC_DIRS "."
+                    INCLUDE_DIRS "."
+                    REQUIRES <nombre del componente> unity)
+\end{lstlisting}
+
+Luego al mismo nivel en el directorio debe haber un fichero con los tests incluyendo la librería de U-TTS y el nombre del componente a testear:
+
+\begin{verbatim}
+#include "unity.h"
+\end{verbatim}
+
+
+
+\subsection{Componente de micro-ROS}
+\label{subsection:microroscomponent}
+
+Como se mencionó anteriormente, en el marco de trabajo con ESP-IDF, MicroROS se añade como un componente\footnote{Micro-ROS Component: \url{https://github.com/micro-ROS/micro_ros_espidf_component}}. Este componente ha sido validado en las versiones ESP-IDF v4.3, v4.4 y v5.0, siendo compatible con ESP32, ESP32-S2, ESP32-S3 y ESP32-C3.
+
+\subsubsection{Dependencias}
+
+Para el correcto funcionamiento de este componente, es necesario instalar \textbf{colcon} y otros paquetes de Python 3 dentro del entorno virtual de IDF, para la construcción de paquetes de micro-ROS:
+
+\begin{verbatim}
+. $IDF_PATH/export.sh
+pip3 install catkin_pkg lark-parser empy colcon-common-extensions
+\end{verbatim}
+
+\subsubsection{Middlewares disponibles}
+
+El componente de micro-ROS permite trabajar con dos middlewares diferentes:
+
+\begin{itemize}
+\item \textbf{eProsima Micro XRCE-DDS:} Este es el middleware predeterminado de micro-ROS. XRCE-DDS es un protocolo diseñado para permitir comunicaciones eficientes y efectivas entre clientes y agentes en sistemas embebidos, siendo por tanto adecuado para entornos con recursos limitados.
+
+\item \textbf{EmbeddedRTPS:} Se trata de una implementación experimental de un middleware RTPS compatible con ROS 2. El middleware RTPS (Real-Time Publish-Subscribe) es un protocolo de capa de middleware que proporciona comunicación en tiempo real en redes de área amplia. Este middleware se utiliza en sistemas distribuidos y entornos de tiempo real.
+\end{itemize}
+
+Para seleccionar uno de estos middlewares, se debe usar el comando \textbf{idf.py menuconfig} y acceder a \textbf{micro-ROS Settings > micro-ROS middleware}.
+
+
+
+En el presente proyecto, se optó por el uso del middleware predeterminado, eProsima Micro XRCE-DDS.
+
+\subsubsection{Instalación del componente}
+
+El componente de MicroROS puede incorporarse al proyecto ESP-IDF clonando directamente el repositorio correspondiente en el directorio \textbf{components}. Es importante destacar que la rama a clonar del repositorio debe coincidir con la versión de ROS2 que se está utilizando. En el contexto de este proyecto, dado que se está utilizando ROS2 Humble, se ha clonado la rama "Humble" del repositorio.
+
+
+
+En caso de enfrentar dificultades durante el proceso de compilación, es recomendable verificar que se está operando en un entorno de shell limpio, es decir, sin que el script de configuración de ROS 2 esté en funcionamiento.
+
+\subsection{Guía de uso}
+\label{subseccion:usageespidf}
+Esta sección presenta una guía paso a paso para poner en marcha el proyecto:
+
+\begin{itemize}
+\item Ejecutar el comando \texttt{idf.py set-target esp32} para seleccionar el microcontrolador ESP32 como objetivo.
+\item Configurar el proyecto ejecutando \texttt{idf.py menuconfig}.
+\item Construir el proyecto con \texttt{idf.py build}.
+\item Conectar el dispositivo y luego cargar el proyecto en el dispositivo con el comando \texttt{idf.py -p PORT flash}, sustituyendo \texttt{PORT} por el puerto correspondiente del dispositivo.
+\item Monitorear la salida de la aplicación con \texttt{idf.py -p PORT monitor}.
+\end{itemize}
+
+Es importante reemplazar \texttt{PORT} con el puerto apropiado para su sistema teniendo en cuenta lo visto en el apartado \ref{WLS-considerations}.
+

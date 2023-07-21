@@ -1,0 +1,27 @@
+\section{ROS 2}
+La librería Ros2ForUnity requiere la instalación de ROS 2 en Windows (Windows 10), así como en el Subsistema de Windows para Linux (WSL), específicamente Ubuntu 22.04.2 LTS. Aunque no todas las librerías exigen la instalación de ROS2 en Windows, para Ros2ForUnity es imprescindible si tenemos Unity en Windows, como es el caso.
+
+\subsection{Instalación de ROS 2 en Ubuntu}
+Se optó por la versión Humble de ROS 2 para Ubuntu, siguiendo las instrucciones proporcionadas en la documentación oficial\footnote{ROS Humble Installation Ubuntu: \url{https://docs.ros.org/en/humble/Installation/Alternatives/Ubuntu-Development-Setup.html}}. Después de la instalación, se llevaron a cabo varias pruebas para confirmar que todo funcionaba correctamente, como se puede ver en la Figura \ref{figure:ros2-examples-installation-Ubuntu}.
+
+\begin{figure}[ht]
+   \centering
+    \includegraphics[width=0.8\linewidth]{figures/prueba instalación ros2.png}
+   \caption{Ejemplos de funcionamiento de la instalación de ROS 2 Ubuntu}
+   \label{figure:ros2-examples-installation-Ubuntu}
+\end{figure}
+
+\subsection{Instalación de ROS 2 en Windows 10}
+Para instalar ROS 2 en Windows 10, se siguió la documentación oficial de ROS 2 Humble\footnote{ROS Humble Installation Windows: \url{https://docs.ros.org/en/humble/Installation/Alternatives/Windows-Development-Setup.html}}. Se recomienda realizar la instalación desde la PowerShell con privilegios de administrador. Dado que el comando "call" no está disponible en PowerShell, se sustituyó por:
+
+\begin{verbatim}
+C:\dev\ros2\_humble\local\_setup.ps1
+\end{verbatim}
+
+
+
+Es importante tratar con cuidado a Chocolatey, ya que puede tener dificultades para desinstalar completamente los paquetes que instala. Si se produce un error, será necesario eliminar los paquetes manualmente a través del editor de registros de Windows.
+
+
+
+Finalmente, es crucial prestar atención a las versiones de .Net y al Visual Studio 2019. Visual Studio 2019, se debe asegurar que no se instalan las herramientas C++ CMake, deseleccionándolas en la lista de componentes a instalar.

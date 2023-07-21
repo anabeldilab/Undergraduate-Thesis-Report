@@ -1,0 +1,34 @@
+\section{Cámara}
+
+La cámara utilizada es una M5 Stack Timercam, como se menciona en la sección \ref{section:camara}.
+
+\subsection{Instalación del entorno de trabajo}
+\label{section:cameraenvironmentinstallation}
+
+El software de la cámara es específico y solo es compatible con la versión ESP-IDF v4.0.1. Para garantizar una correcta instalación, es necesario clonar esta versión específica del repositorio.
+
+\begin{verbatim}
+git clone -b v4.0.1 --recursive 
+https://github.com/espressif/esp-idf.git esp-idf-v4.0.1
+\end{verbatim}
+
+Posteriormente, es necesario instalar el entorno de desarrollo descargado para poder interactuar con él.
+
+\begin{verbatim}
+~/esp_idf_4.0/esp-idf-v4.0.1$ ./install.sh
+\end{verbatim}
+
+Para poder compilar el código de la cámara o monitorizarla desde la terminal, entre otras acciones, siempre será necesario ejecutar el siguiente comando en el directorio ``~/esp\_idf\_4.0/esp-idf-v4.0.1'':
+
+\begin{verbatim}
+source export.sh
+\end{verbatim}
+
+Es importante mencionar que no se puede ejecutar este comando después de haber hecho un source export.sh de otro ESP-IDF.
+
+Para facilitar el uso de estos comandos, se han creado los siguientes alias que se deben añadir al archivo .bashrc:
+
+\begin{verbatim}
+alias get_idf='. $HOME/esp/esp-idf/export.sh'
+alias get_idf4='. $HOME/esp_idf_4.0/esp-idf-v4.0.1/export.sh'
+\end{verbatim}

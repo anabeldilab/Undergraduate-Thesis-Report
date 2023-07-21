@@ -1,4 +1,57 @@
-\section{Conclusión}
+\section{Conclusiones}
+
+En este apartado se presentan las conclusiones m\'as importantes de este trabajo. 
+
+En primer lugar, he de destacar que se han cumplido todos los objetivos aunque no todo haya salido como se esperaba.
+
+\subsection{Desarrollo del prototipo}
+Como se destaca en la capítulo \ref{chapter:challengesanddifficulties}, la necesidad de aprender ROS desde cero representó un compromiso significativo de tiempo y esfuerzo autónomo para la comprensión y asimilación de la información. Adicionalmente, no había tenido experiencia previa programando en Unity, lo que también implicó un proceso de aprendizaje desde cero. En relación a la programación específica en el ESP32, aunque era un terreno desconocido, me beneficié de los conocimientos previos adquiridos en una asignatura del grado denominada Sistemas Empotrados, que proporcionó una base sólida para la programación en general en microcontroladores. Esto resultó especialmente útil durante la programación del pan-tilt desde el microcontrolador con respecto a la PWM, una tarea que, si bien requirió cierta investigación, resultó más sencilla gracias a las habilidades adquiridas en dicha asignatura. De todos los aspectos del proyecto, lo que presentó menos complicaciones fue la operación de los Neurotags y el sistema en sí de NextMind.
+
+En cuanto a mi percepción personal sobre las herramientas utilizadas, ROS me pareció fascinante y es una herramienta que me gustaría seguir utilizando en el futuro. Mi experiencia con Unity, por otro lado, no fue tan positiva debido a su sistema de registro y gestión de errores, que considero complicado en cuanto a la localizaci\'on de fallos. Respecto a ESP-IDF, me ha proporcionado una experiencia satisfactoria, percibiéndola como una estructura más modular que un proyecto de micro-ROS para la programación en microcontroladores Freertos.
+
+\subsection{Interpretación de los datos y conclusiones obtenidas}
+ 
+ Los resultados del estudio apuntan a la eficacia y adaptabilidad de NextMind en distintos entornos y situaciones. Como BCI, se muestra accesible y resistente, sin verse influido por aspectos como la presencia de cabello. Su rendimiento eficaz, tanto en interiores como exteriores, y su resistencia a las variaciones de luz ambiental, abren nuevas posibilidades para futuros avances en dispositivos BCI. Se observó que una calibración precisa y experiencia previa con BCIs mejoran su eficiencia, subrayando la necesidad de familiarización con la tecnología. En cuanto a la comodidad, la mayoría de los usuarios valoraron positivamente a NextMind, lo que indica su potencial para uso extendido.
 
 
 \section{Líneas futuras}
+
+\subsection{Mejoras del prototipo}
+
+Con miras a continuar con el desarrollo y la mejora del proyecto, se han identificado diversas posibles acciones y modificaciones para mejorar su funcionamiento y expandir su utilidad.
+
+\begin{itemize}
+
+\item \textbf{Mejorar la cámara}: Se podría mejorar la resolución de la cámara para captar con mayor claridad los códigos QR. Una cámara más potente contribuiría a mejorar la efectividad y precisión en la detección de los códigos.
+
+\item \textbf{Implementar una función de deshacer estado}: Sería útil incorporar una función en el prototipo para revertir rápidamente el estado que se encuentra la cámara dentro de la deteción de QR, por ejemplo, a través de un botón o una tecla en el teclado que permita quitar un estado de manera sencilla.
+
+\item \textbf{Mejoras en la calibración y el ajuste del dispositivo}: Según las opiniones recogidas, el dispositivo en general no es difícil de poner, pero algunas personas con determinados tipos de cabello pueden tener dificultades. Por lo tanto, se podrían explorar opciones para facilitar su ajuste. Además, podría ser beneficioso tener un método alternativo para la calibración en caso de falla.
+
+\item \textbf{Incorporar un feedback acústico}: Algunos usuarios, al parecer, estaban tan enfocados en el estímulo que no notaban el feedback visual proporcionado por el NeuroTag. Para facilitar la percepción del usuario, se podría añadir un estímulo acústico adicional al visual.
+
+\item \textbf{Ampliar los controles con NeuroButtons}: Sería conveniente implementar NeuroButtons numerados del 1 al 5, donde cada número represente una cantidad específica de movimientos automáticos que puede realizar el sistema Pan-Tilt.
+
+\item \textbf{Explorar más dispositivos}: La aplicación del BCI se puede expandir a otros dispositivos, como una silla robotizada o un robot, lo que abriría nuevas posibilidades para el control a distancia de diversos aparatos mediante la interfaz cerebro-computadora.
+
+\end{itemize}
+
+
+
+\subsection{Mejoras de investigación}
+
+\begin{itemize}
+\item \textbf{Ampliar la muestra}: Una muestra más grande permitirá obtener resultados más representativos y confiables en las pruebas, pudiendo tener conclusiones más certeras.
+
+\item \textbf{Explorar el impacto del ruido ambiental}: Sería interesante, teniendo en cuenta que el presente prototipo está pensado para exteriores, estudiar la dificultad para concentrarse en ambientes ruidosos puede afectar el rendimiento del NextMind. Esto podría implicar la realización de más pruebas en estos contextos.
+
+\item \textbf{Investigar el efecto del TDAH}: El estudio de los efectos del Trastorno por Déficit de Atención e Hiperactividad (TDAH) en el uso del NextMind puede proporcionar perspectivas útiles ya que la concentración es vital en este BCI.
+
+\item \textbf{Estudiar la adaptación al dispositivo en personas con condiciones visuales}: 
+Durante las pruebas se han encontrado ciertos patrones, aunque no suficientes, entre condiciones visuales y nota en la calibración. El estudio de cómo las personas con diferentes condiciones visuales (miopía, astigmatismo, hipermetropía, etc.) se adaptan al uso de NextMind podría ser interesante.
+
+\item \textbf{Analizar el efecto del entrenamiento prolongado}: Investigar si la eficacia del dispositivo puede mejorar con la práctica y el entrenamiento prolongado y determinar el tiempo necesario para observar mejoras significativas. Ya que durante las pruebas se vieron indicios claros de que teniendo experiencia previa en el uso de BCI se conseguía un mejor dominio del mismo.
+
+\item \textbf{Estudiar el efecto de la fatiga}: Investigar cómo la fatiga o el cansancio mental pueden afectar el rendimiento del NextMind. Esto podría ayudar a determinar cuánto tiempo puede ser usado eficazmente antes de que la fatiga comience a afectar el rendimiento.
+
+\end{itemize}

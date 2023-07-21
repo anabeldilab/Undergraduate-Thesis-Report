@@ -1,0 +1,33 @@
+\section{Microcontrolador ESP32}
+
+Para el control efectivo de dispositivos en proyectos como este, la elección de un microcontrolador adecuado es de gran importancia. Es esencial contar con un componente que gestione eficazmente la comunicación entre los diferentes elementos del sistema y que posea la capacidad suficiente para realizar las tareas requeridas sin comprometer el rendimiento. En este sentido, se ha seleccionado el microcontrolador ESP32\footnote{ESP32 \url{https://www.espressif.com/en/products/socs/esp32}}, desarrollado por Espressif Systems, para este proyecto.
+
+
+
+El ESP32 es un microcontrolador de alto rendimiento que se ha ganado reconocimiento en el campo de los sistemas embebidos y el Internet de las Cosas (IoT), gracias a su robusto rendimiento, bajo consumo de energía y versatilidad.
+
+
+
+En este proyecto, el ESP32 desempeña el papel de microcontrolador principal. Su combinación de potencia y la incorporación del marco de trabajo de MicroROS le permiten ejecutar un nodo de ROS2, convirtiéndolo en un componente clave para el logro de los objetivos del proyecto.
+
+
+\section{Entorno de desarrollo ESP-IDF}
+
+Para la programación del microcontrolador ESP32 en este proyecto, se ha elegido el entorno de desarrollo ESP-IDF (Espressif IoT Development Framework)\footnote{ESP-IDF \url{https://docs.espressif.com/projects/esp-idf/en/latest/esp32/}}. Esta elección se sustenta en las diversas bibliotecas y herramientas que ESP-IDF proporciona, simplificando la programación de alto rendimiento para estos dispositivos. Además, una característica determinante es su compatibilidad con MicroROS, permitiendo su integración como un componente de ESP-IDF\footnote{Componente microROS \url{https://github.com/micro-ROS/micro_ros_espidf_component/}}.
+
+
+
+El ESP-IDF posee un sistema de compilación basado en CMake que permite una configuración del proyecto flexible, la detección automática de dependencias y la compilación cruzada para los microcontroladores ESP32, facilitando el desarrollo del proyecto.
+
+
+\subsection{Tests: Unity - ThrowTheSwitch}
+
+Para la implementación de pruebas unitarias en el código C del proyecto del microcontrolador, se ha seleccionado Unity - ThrowTheSwitch (U-TTS)\footnote{U-TTS pruebas unitarias para C: \url{https://www.throwtheswitch.org/unity}}, un marco de pruebas para el lenguaje de programación C desarrollado por ThrowTheSwitch.org. Su integración por defecto con los proyectos ESP-IDF asegura una compatibilidad perfecta con el microcontrolador ESP32 utilizado en este proyecto.
+
+
+
+U-TTS destaca por su diseño ligero y portátil, lo que lo hace adecuado para proyectos embebidos. Su sintaxis simple facilita su uso y, aunque está diseñado para C, U-TTS puede usarse con casi cualquier lenguaje que se compile a través de C, incluyendo C++. Además, es compatible con una variedad de entornos de compilación y plataformas.
+
+
+
+En este proyecto, el uso de U-TTS permite realizar una verificación sistemática de la funcionalidad del código escrito, incrementando la fiabilidad del sistema en desarrollo y facilitando el mantenimiento y la detección temprana de errores.
