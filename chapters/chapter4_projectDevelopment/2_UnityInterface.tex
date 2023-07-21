@@ -87,7 +87,7 @@ Una vez creado el prefab de los NeuroButtons, se incorporaron a la escena de Uni
 
 
 
-Cada NeuroButton se asoció con una dirección específica del pan-tilt: arriba, abajo, izquierda y derecha. Para lograr esto, se asignó a cada botón una función diferente que se activaría al enfocar el NeuroTag correspondiente. Es importante resaltar que, para proporcionar una interacción tanto por interfaz cerebral como por interfaz tradicional (mouse), se asignó la misma función tanto al evento de "onTrigger" del NeuroTag como al evento de "onClick" del botón. De este modo, se puede realizar la misma acción ya sea haciendo clic con el mouse o enfocando con la atención el NeuroTag.
+Cada NeuroButton se asoció con una dirección específica del pan-tilt: arriba, abajo, izquierda y derecha. Para lograr esto, se asignó a cada botón una función diferente que se activaría al enfocar el NeuroTag correspondiente. Es importante resaltar que, para proporcionar una interacción tanto por interfaz cerebral como por interfaz tradicional (mouse), se asignó la misma función tanto al evento de ``onTrigger'' del NeuroTag como al evento de ``onClick'' del botón. De este modo, se puede realizar la misma acción ya sea haciendo clic con el mouse o enfocando con la atención el NeuroTag.
 
 
 
@@ -99,7 +99,7 @@ Es importante señalar que se encontró un problema común cuando se trabajaba c
 
 
 
-Para solucionar este problema, se cambió el modo de renderizado (Render Mode) del canvas en el Inspector a "Screen - Space: Camera". Posteriormente, se arrastró la cámara principal (Main Camera) de la escena al campo "Render Camera". Este ajuste garantiza que los NeuroTags se renderizan correctamente, permitiendo su detección y activación.
+Para solucionar este problema, se cambió el modo de renderizado (Render Mode) del canvas en el Inspector a ``Screen - Space: Camera''. Posteriormente, se arrastró la cámara principal (Main Camera) de la escena al campo ``Render Camera''. Este ajuste garantiza que los NeuroTags se renderizan correctamente, permitiendo su detección y activación.
 
 \subsection{Integración de Ros2forUnity con NeuroButtons}
 
@@ -124,7 +124,7 @@ Antes de describir el funcionamiento del código, es útil entender los desafío
 
 El código completo se encuentra en el apéndice \ref{appendix:ros2startscript}.
 
-Cuando se recibe un mensaje en el tópico "freertos\_header\_log", este se encola para su posterior procesamiento.
+Cuando se recibe un mensaje en el tópico ``freertos\_header\_log'', este se encola para su posterior procesamiento.
 
 
 Finalmente, en el método Update(), los mensajes se desencolan y se invoca el evento OnMessageReceived para cada uno de ellos.
@@ -207,7 +207,7 @@ http://IP:80/app?app=C&value=V
 
 Donde IP es la dirección IP del servidor web y C y V funcionan de acuerdo a una tabla específica.
 
-En la tabla \ref{table:cam_commands} se pueden observar los distintos comandos (columna "C") y sus respectivos valores (columna "V") utilizados para las peticiones GET a la cámara. Estos comandos y valores proporcionan una serie de funciones que controlan el estado y la funcionalidad de la cámara, como el reinicio del estado interno de la aplicación, la devolución del estado interno, el establecimiento de dicho estado, el control del streaming, el cambio de modo de detección de QRs, el reinicio del sistema completo y la solicitud de detección de QR. Además, algunos de estos comandos permiten conmutar entre modos de operación dependiendo del valor proporcionado.
+En la tabla \ref{table:cam_commands} se pueden observar los distintos comandos (columna ``C'') y sus respectivos valores (columna ``V'') utilizados para las peticiones GET a la cámara. Estos comandos y valores proporcionan una serie de funciones que controlan el estado y la funcionalidad de la cámara, como el reinicio del estado interno de la aplicación, la devolución del estado interno, el establecimiento de dicho estado, el control del streaming, el cambio de modo de detección de QRs, el reinicio del sistema completo y la solicitud de detección de QR. Además, algunos de estos comandos permiten conmutar entre modos de operación dependiendo del valor proporcionado.
 
 \begin{table}[!htb]
 \begin{adjustbox}{width=\textwidth,center}
@@ -237,7 +237,7 @@ En la tabla \ref{table:cam_commands} se pueden observar los distintos comandos (
 
 \subsubsection{Escena de Configuración}
 
-Para gestionar todas estas peticiones GET desde Unity, se ha creado una escena adicional denominada "Escena de Configuración" (véase la figura \ref{figure:configuration-scene})
+Para gestionar todas estas peticiones GET desde Unity, se ha creado una escena adicional denominada ``Escena de Configuración'' (véase la figura \ref{figure:configuration-scene})
 
 \begin{figure}[!htb]
 \centering
@@ -270,7 +270,7 @@ Como ejemplo de las funciones de la clase CameraNetworkCommandController, el mé
 
 
 
-El método GetQR es un método público esencial en esta clase, que se encarga de inicializar la solicitud de detección de códigos QR. Primero, limpia cualquier mensaje previo en el campo responseText, que se utiliza para mostrar la respuesta de la cámara. Luego, verifica el estado de la cámara a través del método GetState del objeto cameraInfo. Si la cámara no está habilitada, se interrumpe el proceso, registrando un error en el registro de Unity y en el campo responseText. Si la cámara está habilitada, se construye un comando en formato de cadena de texto ("/app?app=5\&value=0") para solicitar la detección de un código QR. Posteriormente, se registra dicho comando en el registro de Unity para seguimiento y finalmente se inicia una corrutina llamada SendCommand que se encargará de enviar el comando a la cámara.
+El método GetQR es un método público esencial en esta clase, que se encarga de inicializar la solicitud de detección de códigos QR. Primero, limpia cualquier mensaje previo en el campo responseText, que se utiliza para mostrar la respuesta de la cámara. Luego, verifica el estado de la cámara a través del método GetState del objeto cameraInfo. Si la cámara no está habilitada, se interrumpe el proceso, registrando un error en el registro de Unity y en el campo responseText. Si la cámara está habilitada, se construye un comando en formato de cadena de texto (``/app?app=5\&value=0'') para solicitar la detección de un código QR. Posteriormente, se registra dicho comando en el registro de Unity para seguimiento y finalmente se inicia una corrutina llamada SendCommand que se encargará de enviar el comando a la cámara.
 
 \subsubsection{CameraNetworkCommandController: Rutina SendCommand}
 
@@ -282,7 +282,7 @@ Se modificó el tiempo de espera porque la conexión con la cámara es bastante 
 
 \subsubsection{CameraNetworkCommandController: Método SetState}
 
-El método \lstinline{SetState} tiene un comportamiento un poco diferente, ya que incluye un paso adicional antes de formar y enviar el comando. En este caso, se requiere un valor de entrada proporcionado por el usuario para cambiar el estado de la cámara. Este valor se introduce a través del campo setStateInputField. Se realiza un intento de convertir el texto introducido a un número entero utilizando int.TryParse(). Si la conversión es exitosa, es decir, el usuario ha ingresado un número entero válido, se forma el comando con la estructura "/app?app=2\&value=" + stateValue. Posteriormente, se registra este comando en el registro de Unity y se inicia la corutina SendCommand para enviar la petición a la cámara.
+El método \lstinline{SetState} tiene un comportamiento un poco diferente, ya que incluye un paso adicional antes de formar y enviar el comando. En este caso, se requiere un valor de entrada proporcionado por el usuario para cambiar el estado de la cámara. Este valor se introduce a través del campo setStateInputField. Se realiza un intento de convertir el texto introducido a un número entero utilizando int.TryParse(). Si la conversión es exitosa, es decir, el usuario ha ingresado un número entero válido, se forma el comando con la estructura ``/app?app=2\&value='' + stateValue. Posteriormente, se registra este comando en el registro de Unity y se inicia la corutina SendCommand para enviar la petición a la cámara.
 
 
 
@@ -396,9 +396,9 @@ De esta forma, el script ImageStreamUrlUI toma la instancia de ImageStreamUrl y,
 En la escena de configuración quedan dos botones, uno llamado Restart Devices y otro llamado Restart Pan-Tilt.
 
 
-El botón "Restart devices" aprovecha una peculiaridad en la gestión del WiFi, que actualmente se encuentra fuera del control de micro-ROS. Por lo tanto, no puede ser desconectado internamente, lo que da lugar a un error. Este punto será detallado más adelante en el texto. Cuando ocurre dicho error, se desencadena un reinicio total de todos los dispositivos.
+El botón ``Restart devices'' aprovecha una peculiaridad en la gestión del WiFi, que actualmente se encuentra fuera del control de micro-ROS. Por lo tanto, no puede ser desconectado internamente, lo que da lugar a un error. Este punto será detallado más adelante en el texto. Cuando ocurre dicho error, se desencadena un reinicio total de todos los dispositivos.
 
-Para implementar esta funcionalidad, recurrimos a un procedimiento previamente utilizado: empleamos el script "Ros2Publish", instanciado en un GameObject en esta escena. Luego, arrastramos ese GameObject al evento onClick correspondiente y seleccionamos la función pública apropiada.
+Para implementar esta funcionalidad, recurrimos a un procedimiento previamente utilizado: empleamos el script ``Ros2Publish'', instanciado en un GameObject en esta escena. Luego, arrastramos ese GameObject al evento onClick correspondiente y seleccionamos la función pública apropiada.
 
 Para obtener una comprensión más detallada de este proceso, se puede referir a la sección \ref{subsubsection:publicador}, donde se explica su funcionamiento.
 

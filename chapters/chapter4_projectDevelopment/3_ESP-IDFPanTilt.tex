@@ -67,24 +67,24 @@ Las pruebas realizadas son las siguientes:
 
 \item{Prueba de límites máximos y mínimos de duty cycle: 
 \
-(TEST\_CASE("Test max duty and min duty", "[pan\_tilt\_controller]")) 
+(TEST\_CASE(``Test max duty and min duty'', ``[pan\_tilt\_controller]'')) 
 Esta prueba verifica que los límites de duty cycle de los servomotores se establecen correctamente.
 }
 \item{ Prueba de inicialización del Pan-Tilt \
 
-(TEST\_CASE("Test pan-tilt initializated", "[pan\_tilt\_controller]")): \
+(TEST\_CASE(``Test pan-tilt initializated'', ``[pan\_tilt\_controller]'')): \
 
 esta prueba confirma que el sistema Pan-Tilt se inicializa correctamente.
 }
 \item{ Pruebas de ángulo horizontal y vertical \
 
-(TEST\_CASE("Test initial horizontal angle", "[pan\_tilt\_controller]") \
+(TEST\_CASE(``Test initial horizontal angle'', ``[pan\_tilt\_controller]'') \
 
-y TEST\_CASE("Test initial vertical angle", "[pan\_tilt\_controller]")): \
+y TEST\_CASE(``Test initial vertical angle'', ``[pan\_tilt\_controller]'')): \
 estas pruebas verifican que los ángulos horizontales y verticales de los servomotores se establecen y se actualizan correctamente.
 }
 \item{ Prueba de incremento de movimiento \
-(TEST\_CASE("Test increment movement", "[pan\_tilt\_controller]")): \
+(TEST\_CASE(``Test increment movement'', ``[pan\_tilt\_controller]'')): \
 esta prueba verifica que el sistema Pan-Tilt puede cambiar su ángulo vertical con precisión, lo cual es importante para garantizar un movimiento suave y controlado.
 }
 \end{itemize}
@@ -115,7 +115,7 @@ A continuación, la función de callback extrae el comando y los datos del mensa
 Finalmente, la función de callback ejecuta diferentes acciones dependiendo del comando y los datos recibidos. Estas acciones pueden incluir inicializar la conexión WiFi como punto de acceso, desconectar la conexión WiFi, establecer los ángulos de los servos y más.
 
 \subsubsection{Publicador}
-En este proyecto, el publicador se inicializa en la función micro\_ros\_task, mediante el uso de la función rclc\_publisher\_init\_default. El publicador se configura para enviar mensajes del tipo std\_msgs\_\_msg\_\_Header al tema "/freertos\_header\_log".
+En este proyecto, el publicador se inicializa en la función micro\_ros\_task, mediante el uso de la función rclc\_publisher\_init\_default. El publicador se configura para enviar mensajes del tipo std\_msgs\_\_msg\_\_Header al tema ``/freertos\_header\_log''.
 
 
 
