@@ -22,7 +22,7 @@ The work accomplished is divided in two parts:
 
 ## Versions
 - ROS 2 Humble Hawksbill
-- Unity 2020.3.14f1 
+- Unity 2022.3.3f1
 - Ubuntu 22.04.2 LTS 
 - ESP32-WROOM-32D
 - Camera works with ESP-IDFv4.0.1
