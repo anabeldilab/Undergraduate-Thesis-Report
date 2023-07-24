@@ -31,6 +31,6 @@ The work accomplished is divided in two parts:
 ## Work Accomplished
 Here are the links to the other repositories related to my Bachelor's Degree thesis:
 - [Thesis-Unity-Pan-Tilt](https://github.com/anabeldilab/Thesis-Unity-Pan-Tilt): Unity Pan-Tilt project
-- [Thesis-MicroROS-Pan-Tilt](https://github.com/anabeldilab/Thesis-MicroROS-Pan-Tilt): MicroROS Pan-Tilt projet
+- [Thesis-MicroROS-Pan-Tilt](https://github.com/anabeldilab/Thesis-MicroROS-Pan-Tilt): MicroROS Pan-Tilt project
 - [Thesis-Unity-Robot](https://github.com/anabeldilab/Thesis-Unity-Robot): Unity Robot version project (adaptation)
 
