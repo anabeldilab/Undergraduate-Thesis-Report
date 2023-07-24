@@ -14,16 +14,19 @@ The work accomplished is divided in two parts:
 ## Technologies Used
 - [NextMind](https://www.next-mind.com/)
 - [Unity](https://unity.com/)
-- [ESP32-WROOM-32D](https://www.espressif.com/en/products/socs/esp32)
-- [Servomotor](https://en.wikipedia.org/wiki/Servomotor)
 - [ROS 2](https://docs.ros.org/en/rolling/Releases/Release-Humble-Hawksbill.html)
 - [micro-ROS](https://micro.ros.org/)
+- [ESP32-WROOM-32D](https://www.espressif.com/en/products/socs/esp32)
+- Pan-Tilt
+- Camera
 
 ## Versions
 - ROS 2 Humble Hawksbill
 - Unity 2020.3.14f1 
 - Ubuntu 22.04.2 LTS 
 - ESP32-WROOM-32D
+- Camera works with ESP-IDFv4.0.1
+- Pan-Tilt works with ESP-IDFv6
 
 ## Work Accomplished
 Here are the links to the other repositories related to my Bachelor's Degree thesis:
